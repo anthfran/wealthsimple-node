@@ -45,6 +45,41 @@ const getUser = (appCredentials) => {
   return (token, userId) => request(appCredentials, {url:'/users/' + userId, method:"GET"}, token);
 }
 
+/* PEOPLE */
+const createPerson = (appCredentials) => {
+  return (token, body) => request(appCredentials, {url:'/people', method:"POST"}, token, {}, body);
+}
+const listPeople = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/people', method:"GET"}, token, params);
+}
+
+const getPerson = (appCredentials) => {
+  return (token, personId) => request(appCredentials, {url:'/people/' + personId, method:"POST"}, token);
+}
+
+const updatePerson = (appCredentials) => {
+  return (token, personId) => request(appCredentials, {url:'/people/' + personId, method:"PATCH"}, token);
+}
+
+/* ACCOUNTS */
+
+const createAccount = (appCredentials) => {
+  return (token, body) => request(appCredentials, {url:'/accounts', method:"POST"}, token, {}, body);
+}
+
+const listAccounts = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/accounts', method:"GET"}, token, params);
+}
+
+const getAccount = (appCredentials) => {
+  return (token, account) => request(appCredentials, {url:'/accounts/' + account, method:"GET"}, token);
+}
+
+const getAccountTypes = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/accounts/account_types', method:"GET"}, token, params);
+}
+
+
 
 module.exports = {
   appId(appCredentials) {
@@ -58,6 +93,9 @@ module.exports = {
         createUser: createUser(appCredentials),
         listUsers: listUsers(appCredentials),
         getUser: getUser(appCredentials),
+        /* ACCOUNTS */
+        listAccounts: listAccounts(appCredentials),
+        getAccount: getAccount(appCredentials),
       };
     } else {
       console.log("Credentials:", appCredentials);
