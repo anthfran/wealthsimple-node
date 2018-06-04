@@ -61,8 +61,13 @@ const updatePerson = (appCredentials) => {
   return (token, personId) => request(appCredentials, {url:'/people/' + personId, method:"PATCH"}, token);
 }
 
-/* ACCOUNTS */
+/* TRUSTS */
+/* UNIMPLEMENTED */
 
+/* CORPORATIONS */
+/* UNIMPLEMENTED */
+
+/* ACCOUNTS */
 const createAccount = (appCredentials) => {
   return (token, body) => request(appCredentials, {url:'/accounts', method:"POST"}, token, {}, body);
 }
@@ -77,6 +82,11 @@ const getAccount = (appCredentials) => {
 
 const getAccountTypes = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/accounts/account_types', method:"GET"}, token, params);
+}
+
+/* DAILY VALUES */
+const getDailyValues = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/daily_values/', method:"GET"}, token, params);
 }
 
 /* PROJECTIONS */
@@ -119,6 +129,8 @@ module.exports = {
         /* ACCOUNTS */
         listAccounts: listAccounts(appCredentials),
         getAccount: getAccount(appCredentials),
+        /* DAILY VALUES */
+        getDailyValues: getDailyValues(appCredentials),
         /* PROJECTIONS */
         getProjection: getProjection(appCredentials),
         /* BANK ACCOUNTS */
