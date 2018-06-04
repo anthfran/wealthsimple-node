@@ -33,6 +33,17 @@ const tokenRefresh = (appCredentials) => {
   return (refreshToken) => request(appCredentials, {url:'/oauth/token', method:"POST"}, "", {grant_type: "refresh_token", refresh_token: refreshToken});
 }
 
+/* USERS */
+const createUser = (appCredentials) => {
+  return (body) => request(appCredentials, {url:'/users', method:"POST"}, "", {}, body);
+}
+const listUsers = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/users', method:"GET"}, token, params);
+}
+
+const getUser = (appCredentials) => {
+  return (token, userId) => request(appCredentials, {url:'/users/' + userId, method:"GET"}, token);
+}
 
 
 module.exports = {
@@ -43,6 +54,10 @@ module.exports = {
         /* AUTH */
         tokenExchange: tokenExchange(appCredentials),
         tokenRefresh: tokenRefresh(appCredentials),
+        /* USERS */
+        createUser: createUser(appCredentials),
+        listUsers: listUsers(appCredentials),
+        getUser: getUser(appCredentials),
       };
     } else {
       console.log("Credentials:", appCredentials);
