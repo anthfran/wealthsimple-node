@@ -79,6 +79,17 @@ const getAccountTypes = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/accounts/account_types', method:"GET"}, token, params);
 }
 
+/* PROJECTIONS */
+const getProjection = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/projections', method:"GET"}, token, params);
+}
+
+
+/* BANK ACCOUNTS */
+const listBankAccounts = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/bank_accounts', method:"GET"}, token, params);
+}
+
 
 
 module.exports = {
@@ -96,6 +107,11 @@ module.exports = {
         /* ACCOUNTS */
         listAccounts: listAccounts(appCredentials),
         getAccount: getAccount(appCredentials),
+        /* PROJECTIONS */
+        getProjection: getProjection(appCredentials),
+        /* BANK ACCOUNTS */
+        listBankAccounts: listBankAccounts(appCredentials),
+
       };
     } else {
       console.log("Credentials:", appCredentials);
