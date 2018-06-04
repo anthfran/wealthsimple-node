@@ -1,10 +1,10 @@
 {
   "name": "wealthsimple-node",
   "version": "0.0.1",
-  "description": "Wealthsimple API integration for NodeJS",
+  "description": "Wealthsimple API integration for Node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
