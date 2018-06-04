@@ -90,6 +90,18 @@ const listBankAccounts = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/bank_accounts', method:"GET"}, token, params);
 }
 
+/* DEPOSITS */
+const createDeposit = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/deposits', method:"POST"}, token, params);
+}
+
+const listDeposits = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/deposits', method:"GET"}, token, params);
+}
+
+const getDeposits = (appCredentials) => {
+  return (token, depositId, params) => request(appCredentials, {url:'/deposits/' + depositId, method:"GET"}, token, params);
+}
 
 
 module.exports = {
@@ -111,7 +123,10 @@ module.exports = {
         getProjection: getProjection(appCredentials),
         /* BANK ACCOUNTS */
         listBankAccounts: listBankAccounts(appCredentials),
-
+        /* DEPOSITS */
+        createDeposit: createDeposit(appCredentials),
+        listDeposits: listDeposits(appCredentials),
+        getDeposits: getDeposits(appCredentials),
       };
     } else {
       console.log("Credentials:", appCredentials);
