@@ -34,11 +34,16 @@ const tokenRefresh = (appCredentials) => {
 
 module.exports = {
   appId(appCredentials) {
-    return {
-      healthCheck: healthCheck,
-      tokenExchange: tokenExchange(appCredentials),
-      tokenRefresh: tokenRefresh(appCredentials),
-    };
-  }
+    if (typeof appCredentials.client_id === "string" && typeof appCredentials.client_secret === "string" && typeof appCredentials.redirect_uri === "string") {
+      return {
+        healthCheck: healthCheck,
+        tokenExchange: tokenExchange(appCredentials),
+        tokenRefresh: tokenRefresh(appCredentials),
+      };
+    } else {
+      console.log("Credentials", appCredentials);
+      throw new Error("Invalid app Wealthsimple app credentials");
+    }
 
+  }
 }
