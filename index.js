@@ -19,7 +19,13 @@ const request = (appCredentials, api, token, params, body) => {
     },
     body: JSON.stringify(body)
   })
-  .then(response => response.json());
+  .then(response => {
+    if (!response.ok) {
+      let error = response.status + " " + response.statusText
+      throw Error(error)
+    }
+    else return response.json()
+  });
 }
 
 const healthCheck = request({}, {url:'/healthcheck', method:"GET"});
