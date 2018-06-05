@@ -108,7 +108,7 @@ Exchanges an auth code for OAuth2 tokens
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `code` **[String][64]** Auth string from Wealthsimple redirect
 
 ### Examples
@@ -125,7 +125,7 @@ Refreshes OAuth2 tokens
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `refreshToken` **[String][64]** Refresh Token
 
 ### Examples
@@ -143,7 +143,7 @@ Create a User
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `body` **[Object][67]**
 
 ### Examples
@@ -162,7 +162,7 @@ This API will return a list of Users scoped by the authorization credentials.
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]?** See wealthsimple website for
 
@@ -186,7 +186,7 @@ Get User
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `userId` **[String][64]** Example "user-12398ud"
 
@@ -205,7 +205,7 @@ Create Person
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `body` **[Object][67]** See wealthsimple website for an example of the request body
 
@@ -225,7 +225,7 @@ This API will return a list of People scoped by the authorization credentials.
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]** See wealthsimple website for an example of the request parameters
 
@@ -245,7 +245,7 @@ Get a Person entity if you know the person_id and the current credentials have a
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `personId` **[String][64]** Example "person-12398ud"
 
@@ -265,7 +265,7 @@ You can add/remove information to the Person entity as the information becomes a
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `personId` **[String][64]** Example "person-12398ud"
 -   `body` **[Object][67]** See wealthsimple website for an example of the body
@@ -286,7 +286,7 @@ You can add/remove information to the Person entity as the information becomes a
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `personId` **[String][64]** Example "person-12398ud"
 -   `body` **[Object][67]** See wealthsimple website for an example of the body
@@ -306,7 +306,7 @@ List Accounts
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
 
@@ -329,7 +329,7 @@ Get Account
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `accountId` **[String][64]** Account ID String
 
@@ -353,7 +353,7 @@ Returns openable account types. If a client_id is provided it will scope the typ
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
 
@@ -377,7 +377,7 @@ Returns historical daily values for a given account. This API will only return a
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
     -   `params.accound_id` **[Object][67]** Required account_id param
@@ -398,7 +398,7 @@ Returns positions for a given account. This API will also allow you to retrieve 
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
     -   `params.accound_id` **[Object][67]** Required account_id param
@@ -419,7 +419,7 @@ Lists all Transactions. The number of Transactions can be potentially prohibitiv
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
     -   `params.accound_id` **[Object][67]** Required account_id param
@@ -440,7 +440,7 @@ Retrieves a projections of returns for an account based on deposits and frequenc
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]** Projection params
     -   `params.accound_id` **[Object][67]** Required account_id param
@@ -463,7 +463,7 @@ List Bank Accounts
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]?** See website for optional query params
 
@@ -483,7 +483,7 @@ Initiates an electronic funds transfer to deposit funds to an Account from a Ban
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `body` **[Object][67]** Required deposit details
     -   `body.bank_account_id` **[Object][67]** The unique id of the Bank Account
@@ -506,7 +506,7 @@ List Deposits
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `params` **[Object][67]?** See website for optional query params
 
@@ -525,7 +525,7 @@ Get Deposit
 
 ### Parameters
 
--   `appCredentials`  
+
 -   `token` **[String][64]** OAuth token for a user
 -   `fundsTransferId` **[String][64]** funds_transfer_id
 
