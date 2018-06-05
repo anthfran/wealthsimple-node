@@ -1,10 +1,12 @@
 {
   "name": "wealthsimple-node",
-  "version": "0.0.1",
-  "description": "Wealthsimple API integration for Node",
+  "version": "0.1.0",
+  "description": "Wealthsimple API for NodeJS",
+  "author": "Anthony Francella <anthonyf@gmail.com>",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
