@@ -6,7 +6,8 @@ This is still under development and therefore currently only supports sandbox.
 
 ## Installation
 
-``` npm install --save https://github.com/anthfran/wealthsimple-node
+```
+npm install --save https://github.com/anthfran/wealthsimple-node
 ```
 
 ### Example of Usage
