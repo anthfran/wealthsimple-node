@@ -24,41 +24,132 @@ const request = (appCredentials, api, token, params, body) => {
 
 const healthCheck = request({}, {url:'/healthcheck', method:"GET"});
 
-/* AUTHENTICATION */
+/**
+ * Exchanges an auth code for OAuth2 tokens
+ * @param {String} code - Auth string from Wealthsimple redirect
+ * @returns {Promise} Fetch promise which will resolve containing OAuth2 Tokens
+ * @example
+ * wealthsimple.tokenExchange(authCode).then(response=>console.log(response));
+ */
 const tokenExchange = (appCredentials) => {
   return (code) => request(appCredentials, {url:'/oauth/token', method:"POST"}, "", {grant_type: "authorization_code", code: code});
 }
 
+/**
+ * Refreshes OAuth2 tokens
+ * @param {String} refreshToken - Refresh Token
+ * @returns {Promise} Fetch promise which will resolve containing OAuth2 Tokens
+ * @example
+ * wealthsimple.tokenRefresh(refreshToken).then(response=>console.log(response));
+ */
 const tokenRefresh = (appCredentials) => {
   return (refreshToken) => request(appCredentials, {url:'/oauth/token', method:"POST"}, "", {grant_type: "refresh_token", refresh_token: refreshToken});
 }
 
-/* USERS */
+/**
+ * Create a User
+ * https://developers.wealthsimple.com/#operation/Create%20User
+ *
+ * @param {Object} body
+ * @returns {Promise} Fetch promise which will resolve with newly created user
+ * @example
+ * wealthsimple.createUser(body).then(response=>console.log(response));
+ */
 const createUser = (appCredentials) => {
   return (body) => request(appCredentials, {url:'/users', method:"POST"}, "", {}, body);
 }
+
+/**
+ * List Users
+ * https://developers.wealthsimple.com/#operation/List%20Users
+ * This API will return a list of Users scoped by the authorization credentials.
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} [params] - See wealthsimple website for
+ * @returns {Promise} Fetch promise which will resolve with newly created user
+ * @example
+ * wealthsimple.listUsers(token).then(response=>console.log(response));
+ *
+ * @example
+ * let params = { limit: 25, offset: 50, created_before: "2017-06-21"};
+ * wealthsimple.listUsers(token, params).then(response=>console.log(response));
+ */
 const listUsers = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/users', method:"GET"}, token, params);
 }
 
+/**
+ * Get User
+ * https://developers.wealthsimple.com/#operation/Get%20User
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {String} userId - Example "user-12398ud"
+ *
+ * @returns {Promise} Fetch promise which will resolve with user info
+ * @example
+ * wealthsimple.getUser(token, userId).then(response=>console.log(response));
+ */
 const getUser = (appCredentials) => {
   return (token, userId) => request(appCredentials, {url:'/users/' + userId, method:"GET"}, token);
 }
 
-/* PEOPLE */
+/**
+ * Create Person
+ * https://developers.wealthsimple.com/#operation/Create%20Person
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} body - See wealthsimple website for an example of the request body
+ *
+ * @returns {Promise} Fetch promise which will resolve with the created Person
+ * @example
+ * wealthsimple.createPerson(token, body).then(response=>console.log(response));
+ */
 const createPerson = (appCredentials) => {
   return (token, body) => request(appCredentials, {url:'/people', method:"POST"}, token, {}, body);
 }
+/**
+ * List People
+ * https://developers.wealthsimple.com/#operation/List%20People
+ * This API will return a list of People scoped by the authorization credentials.
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} params - See wealthsimple website for an example of the request parameters
+ *
+ * @returns {Promise} Fetch promise which will resolve with the created Person
+ * @example
+ * wealthsimple.createPerson(token, body).then(response=>console.log(response));
+ */
 const listPeople = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/people', method:"GET"}, token, params);
 }
 
+/**
+ * Get Person
+ * https://developers.wealthsimple.com/#operation/Get%20Person
+ * Get a Person entity if you know the person_id and the current credentials have access to the Person.
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {String} personId - Example "person-12398ud"
+ * @returns {Promise} Fetch promise which will resolve with the created Person
+ * @example
+ * wealthsimple.getPerson(token, "person-12398ud").then(response=>console.log(response));
+ */
 const getPerson = (appCredentials) => {
   return (token, personId) => request(appCredentials, {url:'/people/' + personId, method:"POST"}, token);
 }
-
+/**
+ * Update Person
+ * You can add/remove information to the Person entity as the information becomes available using this API. To remove a previously set attribute, set the value to null. Attributes that are not mentioned in the request payload will leave the attribute unchanged in the Person entity.
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {String} personId - Example "person-12398ud"
+ * @param {Object} body - See wealthsimple website for an example of the body
+ * @returns {Promise} Fetch promise which will resolve with the created Person
+ * @example
+ * wealthsimple.getPerson(token, "person-12398ud").then(response=>console.log(response));
+ */
 const updatePerson = (appCredentials) => {
-  return (token, personId) => request(appCredentials, {url:'/people/' + personId, method:"PATCH"}, token);
+  return (token, personId, body) => request(appCredentials, {url:'/people/' + personId, method:"PATCH"}, token, {}, body);
 }
 
 /* TRUSTS */
