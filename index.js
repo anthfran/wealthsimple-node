@@ -188,7 +188,7 @@ const listAccounts = (appCredentials) => {
  * https://developers.wealthsimple.com/#operation/Get%20Account
  *
  * @param {String} token - OAuth token for a user
- * @param {String} accountId - Optional filter params, see Wealthsimple website
+ * @param {String} accountId - Account ID String
  * @returns {Promise} Fetch promise which will resolve with the account details
  * @example
  * wealthsimple.listAccounts(token).then(response=>console.log(response));
@@ -199,13 +199,72 @@ const getAccount = (appCredentials) => {
   return (token, accountId) => request(appCredentials, {url:'/accounts/' + accountId, method:"GET"}, token);
 }
 
+/**
+ * Get Account Types
+ * https://developers.wealthsimple.com/#operation/Get%20Account%20Types
+ * Returns openable account types. If a client_id is provided it will scope the types to the client in question, otherwise it will default to the requestor
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @returns {Promise} Fetch promise which will resolve with the account details
+ * @example
+ * wealthsimple.getAccountTypes(token).then(response=>console.log(response));
+ * @example
+ * wealthsimple.getAccountTypes(token,params).then(response=>console.log(response));
+ */
 const getAccountTypes = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/accounts/account_types', method:"GET"}, token, params);
 }
 
-/* DAILY VALUES */
+/**
+ * Get Daily Values
+ * https://developers.wealthsimple.com/#operation/List%20Daily%20Values
+ * Returns historical daily values for a given account. This API will only return a maximum of 365 days worth of daily values from a given start date. By default, it will return historical values for the last 30-days. The start date must occur before the end date if provided. If the difference between the start date and the end date exceeds 365 days, an error will be thrown. The number of Daily Values can be potentially prohibitively large, the results are paginated.
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @param {Object} params.accound_id - Required account_id param
+ *
+ * @returns {Promise} Fetch promise which will resolve with the account daily values
+ * @example
+ * wealthsimple.getDailyValues(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
+ */
 const getDailyValues = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/daily_values/', method:"GET"}, token, params);
+}
+
+/**
+ * List Positions
+ * https://developers.wealthsimple.com/#tag/Positions
+ * Returns positions for a given account. This API will also allow you to retrieve historical Positions held on a given date.
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @param {Object} params.accound_id - Required account_id param
+ *
+ * @returns {Promise} Fetch promise which will resolve with the account positions
+ * @example
+ * wealthsimple.listPositions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
+ */
+const listPositions = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/positions/', method:"GET"}, token, params);
+}
+
+/**
+ * List Transactions
+ * https://developers.wealthsimple.com/#operation/List%20Transactions
+ * Lists all Transactions. The number of Transactions can be potentially prohibitively large, the results are paginated. By default, the API will return the 250 latest transactions in the last 30 days.
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @param {Object} params.accound_id - Required account_id param
+ *
+ * @returns {Promise} Fetch promise which will resolve with the account positions
+ * @example
+ * wealthsimple.listPositions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
+ */
+const listTransactions = (appCredentials) => {
+  return (token, params) => request(appCredentials, {url:'/transactions/', method:"GET"}, token, params);
 }
 
 /* PROJECTIONS */
@@ -248,8 +307,11 @@ module.exports = {
         /* ACCOUNTS */
         listAccounts: listAccounts(appCredentials),
         getAccount: getAccount(appCredentials),
+        getAccountTypes: getAccountTypes(appCredentials),
         /* DAILY VALUES */
         getDailyValues: getDailyValues(appCredentials),
+        /* LIST POSITIONS */
+        listPositions: listPositions(appCredentials),
         /* PROJECTIONS */
         getProjection: getProjection(appCredentials),
         /* BANK ACCOUNTS */
