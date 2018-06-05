@@ -11,7 +11,8 @@ This is still under development and therefore currently only supports sandbox.
 
 ### Example of Usage
 
-```const credentials = {
+```
+const credentials = {
   "client_id": "XXXXXXXXX",
   "client_secret": "XXXXXXXXX",
   "redirect_uri": "https%3A%2F%2Flocalhost%3A3000%2Fauth"
