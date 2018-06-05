@@ -99,7 +99,6 @@ const getUser = (appCredentials) => {
  *
  * @param {String} token - OAuth token for a user
  * @param {Object} body - See wealthsimple website for an example of the request body
- *
  * @returns {Promise} Fetch promise which will resolve with the created Person
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
@@ -114,8 +113,7 @@ const createPerson = (appCredentials) => {
  *
  * @param {String} token - OAuth token for a user
  * @param {Object} params - See wealthsimple website for an example of the request parameters
- *
- * @returns {Promise} Fetch promise which will resolve with the created Person
+ * @returns {Promise} Fetch promise which will resolve with the list of people
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
  */
@@ -130,7 +128,7 @@ const listPeople = (appCredentials) => {
  *
  * @param {String} token - OAuth token for a user
  * @param {String} personId - Example "person-12398ud"
- * @returns {Promise} Fetch promise which will resolve with the created Person
+ * @returns {Promise} Fetch promise which will resolve with the Person details
  * @example
  * wealthsimple.getPerson(token, "person-12398ud").then(response=>console.log(response));
  */
@@ -139,36 +137,66 @@ const getPerson = (appCredentials) => {
 }
 /**
  * Update Person
+ * https://developers.wealthsimple.com/#operation/Update%20Person
  * You can add/remove information to the Person entity as the information becomes available using this API. To remove a previously set attribute, set the value to null. Attributes that are not mentioned in the request payload will leave the attribute unchanged in the Person entity.
  *
  * @param {String} token - OAuth token for a user
  * @param {String} personId - Example "person-12398ud"
  * @param {Object} body - See wealthsimple website for an example of the body
- * @returns {Promise} Fetch promise which will resolve with the created Person
+ * @returns {Promise} Fetch promise which will resolve with the updated Person
  * @example
- * wealthsimple.getPerson(token, "person-12398ud").then(response=>console.log(response));
+ * wealthsimple.updatePerson(token, "person-12398ud", body).then(response=>console.log(response));
  */
 const updatePerson = (appCredentials) => {
   return (token, personId, body) => request(appCredentials, {url:'/people/' + personId, method:"PATCH"}, token, {}, body);
 }
 
-/* TRUSTS */
-/* UNIMPLEMENTED */
-
-/* CORPORATIONS */
-/* UNIMPLEMENTED */
-
-/* ACCOUNTS */
+/**
+ * Create Account
+ * https://developers.wealthsimple.com/#operation/Create%20Account
+ * You can add/remove information to the Person entity as the information becomes available using this API. To remove a previously set attribute, set the value to null. Attributes that are not mentioned in the request payload will leave the attribute unchanged in the Person entity.
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {String} personId - Example "person-12398ud"
+ * @param {Object} body - See wealthsimple website for an example of the body
+ * @returns {Promise} Fetch promise which will resolve with the created Account
+ * @example
+ * wealthsimple.createAccount(token, body).then(response=>console.log(response));
+ */
 const createAccount = (appCredentials) => {
   return (token, body) => request(appCredentials, {url:'/accounts', method:"POST"}, token, {}, body);
 }
 
+/**
+ * List Accounts
+ * https://developers.wealthsimple.com/#operation/List%20Accounts
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @returns {Promise} Fetch promise which will resolve with the list of accounts
+ * @example
+ * wealthsimple.listAccounts(token).then(response=>console.log(response));
+ * @example
+ * wealthsimple.listAccounts(token,params).then(response=>console.log(response));
+ */
 const listAccounts = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/accounts', method:"GET"}, token, params);
 }
 
+/**
+ * Get Account
+ * https://developers.wealthsimple.com/#operation/Get%20Account
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {String} accountId - Optional filter params, see Wealthsimple website
+ * @returns {Promise} Fetch promise which will resolve with the account details
+ * @example
+ * wealthsimple.listAccounts(token).then(response=>console.log(response));
+ * @example
+ * wealthsimple.getAccount(token,accountId).then(response=>console.log(response));
+ */
 const getAccount = (appCredentials) => {
-  return (token, account) => request(appCredentials, {url:'/accounts/' + account, method:"GET"}, token);
+  return (token, accountId) => request(appCredentials, {url:'/accounts/' + accountId, method:"GET"}, token);
 }
 
 const getAccountTypes = (appCredentials) => {
