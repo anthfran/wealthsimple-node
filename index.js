@@ -259,42 +259,103 @@ const listPositions = (appCredentials) => {
  * @param {Object} [params] - Optional filter params, see Wealthsimple website
  * @param {Object} params.accound_id - Required account_id param
  *
- * @returns {Promise} Fetch promise which will resolve with the account positions
+ * @returns {Promise} Fetch promise which will resolve with the account transactions
  * @example
- * wealthsimple.listPositions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
+ * wealthsimple.listTransactions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
 const listTransactions = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/transactions/', method:"GET"}, token, params);
 }
 
-/* PROJECTIONS */
+/**
+ * Get Projection
+ * https://developers.wealthsimple.com/#operation/Get%20Projection
+ * Retrieves a projections of returns for an account based on deposits and frequency.
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} params - Projection params
+ * @param {Object} params.accound_id - Required account_id param
+ * @param {Object} params.amount - Required deposit amount
+ * @param {Object} params.frequency - Required deposit frequency
+ * @param {Object} params.start_date - Required deposit start date
+ *
+ * @returns {Promise} Fetch promise which will resolve with the projection
+ * @example
+ * wealthsimple.getProjection(token, params).then(response=>console.log(response));
+ */
 const getProjection = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/projections', method:"GET"}, token, params);
 }
 
 
-/* BANK ACCOUNTS */
+/**
+ * List Bank Accounts
+ * https://developers.wealthsimple.com/#operation/List%20Bank%20Accounts
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} [params] - See website for optional query params
+ * @returns {Promise} Fetch promise which will resolve with list of bank accounts
+ * @example
+ * wealthsimple.listBankAccounts(token, params).then(response=>console.log(response));
+ */
 const listBankAccounts = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/bank_accounts', method:"GET"}, token, params);
 }
 
-/* DEPOSITS */
+/**
+ * Create Deposit
+ * https://developers.wealthsimple.com/#operation/Create%20Deposit
+ * Initiates an electronic funds transfer to deposit funds to an Account from a Bank Account
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} body - Required deposit details
+ * @param {Object} body.bank_account_id - The unique id of the Bank Account
+ * @param {Object} body.account_id - The unique id of the Account
+ * @param {Object} body.amount - Dollar amount
+ * @param {Object} body.currency - Currency
+ * @returns {Promise} Fetch promise which will resolve with deposit info
+ * @example
+ * wealthsimple.createDeposit(token, body).then(response=>console.log(response));
+ */
 const createDeposit = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/deposits', method:"POST"}, token, params);
+  return (token, body) => request(appCredentials, {url:'/deposits', method:"POST"}, token, {}, body);
 }
 
+/**
+ * List Deposits
+ * https://developers.wealthsimple.com/#operation/List%20Deposits
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {Object} [params] - See website for optional query params
+ * @returns {Promise} Fetch promise which will resolve with deposit list
+ * @example
+ * wealthsimple.listDeposits(token, body).then(response=>console.log(response));
+ */
 const listDeposits = (appCredentials) => {
   return (token, params) => request(appCredentials, {url:'/deposits', method:"GET"}, token, params);
 }
 
-const getDeposits = (appCredentials) => {
-  return (token, depositId, params) => request(appCredentials, {url:'/deposits/' + depositId, method:"GET"}, token, params);
+/**
+ * Get Deposit
+ * https://developers.wealthsimple.com/#operation/List%20Deposits
+ *
+ * @param {String} token - OAuth token for a user
+ * @param {String} fundsTransferId - funds_transfer_id
+ * @returns {Promise} Fetch promise which will resolve with a deposit entity.
+ * @example
+ * let fundsTransferId = "funds_transfer_id-r3e9c1w";
+ * wealthsimple.getDeposit(token, fundsTransferId).then(response=>console.log(response));
+ */
+const getDeposit = (appCredentials) => {
+  return (token, fundsTransferId) => request(appCredentials, {url:'/deposits/' + depositId, method:"GET"}, token);
 }
 
 
 module.exports = {
   appId(appCredentials) {
-    if (typeof appCredentials.client_id === "string" && typeof appCredentials.client_secret === "string" && typeof appCredentials.redirect_uri === "string") {
+    if (typeof appCredentials.client_id === "string"
+    && typeof appCredentials.client_secret === "string"
+    && typeof appCredentials.redirect_uri === "string" ) {
       return {
         healthCheck: healthCheck,
         /* AUTH */
@@ -310,8 +371,10 @@ module.exports = {
         getAccountTypes: getAccountTypes(appCredentials),
         /* DAILY VALUES */
         getDailyValues: getDailyValues(appCredentials),
-        /* LIST POSITIONS */
+        /* POSITIONS */
         listPositions: listPositions(appCredentials),
+        /* TRANSACTIONS */
+        listTransactions: listTransactions(appCredentials),
         /* PROJECTIONS */
         getProjection: getProjection(appCredentials),
         /* BANK ACCOUNTS */
@@ -319,7 +382,7 @@ module.exports = {
         /* DEPOSITS */
         createDeposit: createDeposit(appCredentials),
         listDeposits: listDeposits(appCredentials),
-        getDeposits: getDeposits(appCredentials),
+        getDeposit: getDeposit(appCredentials),
       };
     } else {
       console.log("Credentials:", appCredentials);
