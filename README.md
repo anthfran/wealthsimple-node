@@ -1,4 +1,4 @@
-# wealthsimple-node
+# Wealthsimple-node
 
 Node.js client for Wealthsimple API: https://developers.wealthsimple.com
 
@@ -18,11 +18,11 @@ const credentials = {
   "client_secret": "XXXXXXXXX",
   "redirect_uri": "https%3A%2F%2Flocalhost%3A3000%2Fauth"
 };
-const wealthsimple = require('wealthsimple-node').appId(credentials);
+const Wealthsimple = require('wealthsimple-node').appId(credentials);
 
 wealthsimple.tokenExchange(authCode)
 .then(tokens => {
-  return wealthsimple.listAccounts(tokens.access_token)
+  return Wealthsimple.listAccounts(tokens.access_token)
 })
 .then(accountResponse => {
   console.log(accountResponse);
@@ -164,7 +164,7 @@ This API will return a list of Users scoped by the authorization credentials.
 
 
 -   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** See wealthsimple website for
+-   `params` **[Object][67]?** See Wealthsimple website for an example of the request parameters
 
 ### Examples
 
@@ -207,7 +207,7 @@ Create Person
 
 
 -   `token` **[String][64]** OAuth token for a user
--   `body` **[Object][67]** See wealthsimple website for an example of the request body
+-   `body` **[Object][67]** See Wealthsimple website for an example of the request body
 
 ### Examples
 
@@ -227,7 +227,7 @@ This API will return a list of People scoped by the authorization credentials.
 
 
 -   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]** See wealthsimple website for an example of the request parameters
+-   `params` **[Object][67]** See Wealthsimple website for an example of the request parameters
 
 ### Examples
 
@@ -268,7 +268,7 @@ You can add/remove information to the Person entity as the information becomes a
 
 -   `token` **[String][64]** OAuth token for a user
 -   `personId` **[String][64]** Example "person-12398ud"
--   `body` **[Object][67]** See wealthsimple website for an example of the body
+-   `body` **[Object][67]** See Wealthsimple website for an example of the body
 
 ### Examples
 
@@ -289,7 +289,7 @@ You can add/remove information to the Person entity as the information becomes a
 
 -   `token` **[String][64]** OAuth token for a user
 -   `personId` **[String][64]** Example "person-12398ud"
--   `body` **[Object][67]** See wealthsimple website for an example of the body
+-   `body` **[Object][67]** See Wealthsimple website for an example of the body
 
 ### Examples
 
@@ -308,7 +308,7 @@ List Accounts
 
 
 -   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
+-   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
 
 ### Examples
 
@@ -355,7 +355,7 @@ Returns openable account types. If a client_id is provided it will scope the typ
 
 
 -   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
+-   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
 
 ### Examples
 
@@ -379,7 +379,7 @@ Returns historical daily values for a given account. This API will only return a
 
 
 -   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
+-   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
     -   `params.accound_id` **[Object][67]** Required account_id param
 
 ### Examples
@@ -400,7 +400,7 @@ Returns positions for a given account. This API will also allow you to retrieve 
 
 
 -   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
+-   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
     -   `params.accound_id` **[Object][67]** Required account_id param
 
 ### Examples
@@ -421,7 +421,7 @@ Lists all Transactions. The number of Transactions can be potentially prohibitiv
 
 
 -   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, see Wealthsimple website
+-   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
     -   `params.accound_id` **[Object][67]** Required account_id param
 
 ### Examples
