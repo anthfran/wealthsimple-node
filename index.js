@@ -71,7 +71,7 @@ const createUser = (appCredentials) => {
  * This API will return a list of Users scoped by the authorization credentials.
  *
  * @param {String} token - OAuth token for a user
- * @param {Object} [params] - See wealthsimple website for
+ * @param {Object} [params] - See Wealthsimple website for an example of the request parameters
  * @returns {Promise} Fetch promise which will resolve with newly created user
  * @example
  * wealthsimple.listUsers(token).then(response=>console.log(response));
@@ -104,7 +104,7 @@ const getUser = (appCredentials) => {
  * https://developers.wealthsimple.com/#operation/Create%20Person
  *
  * @param {String} token - OAuth token for a user
- * @param {Object} body - See wealthsimple website for an example of the request body
+ * @param {Object} body - See Wealthsimple website for an example of the request body
  * @returns {Promise} Fetch promise which will resolve with the created Person
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
@@ -118,7 +118,7 @@ const createPerson = (appCredentials) => {
  * This API will return a list of People scoped by the authorization credentials.
  *
  * @param {String} token - OAuth token for a user
- * @param {Object} params - See wealthsimple website for an example of the request parameters
+ * @param {Object} params - See Wealthsimple website for an example of the request parameters
  * @returns {Promise} Fetch promise which will resolve with the list of people
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
@@ -148,7 +148,7 @@ const getPerson = (appCredentials) => {
  *
  * @param {String} token - OAuth token for a user
  * @param {String} personId - Example "person-12398ud"
- * @param {Object} body - See wealthsimple website for an example of the body
+ * @param {Object} body - See Wealthsimple website for an example of the body
  * @returns {Promise} Fetch promise which will resolve with the updated Person
  * @example
  * wealthsimple.updatePerson(token, "person-12398ud", body).then(response=>console.log(response));
@@ -164,7 +164,7 @@ const updatePerson = (appCredentials) => {
  *
  * @param {String} token - OAuth token for a user
  * @param {String} personId - Example "person-12398ud"
- * @param {Object} body - See wealthsimple website for an example of the body
+ * @param {Object} body - See Wealthsimple website for an example of the body
  * @returns {Promise} Fetch promise which will resolve with the created Account
  * @example
  * wealthsimple.createAccount(token, body).then(response=>console.log(response));
@@ -178,7 +178,7 @@ const createAccount = (appCredentials) => {
  * https://developers.wealthsimple.com/#operation/List%20Accounts
  *
  * @param {String} token - OAuth token for a user
- * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
  * @returns {Promise} Fetch promise which will resolve with the list of accounts
  * @example
  * wealthsimple.listAccounts(token).then(response=>console.log(response));
@@ -211,7 +211,7 @@ const getAccount = (appCredentials) => {
  * Returns openable account types. If a client_id is provided it will scope the types to the client in question, otherwise it will default to the requestor
  *
  * @param {String} token - OAuth token for a user
- * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
  * @returns {Promise} Fetch promise which will resolve with the account details
  * @example
  * wealthsimple.getAccountTypes(token).then(response=>console.log(response));
@@ -228,7 +228,7 @@ const getAccountTypes = (appCredentials) => {
  * Returns historical daily values for a given account. This API will only return a maximum of 365 days worth of daily values from a given start date. By default, it will return historical values for the last 30-days. The start date must occur before the end date if provided. If the difference between the start date and the end date exceeds 365 days, an error will be thrown. The number of Daily Values can be potentially prohibitively large, the results are paginated.
  *
  * @param {String} token - OAuth token for a user
- * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
  * @param {Object} params.accound_id - Required account_id param
  *
  * @returns {Promise} Fetch promise which will resolve with the account daily values
@@ -245,7 +245,7 @@ const getDailyValues = (appCredentials) => {
  * Returns positions for a given account. This API will also allow you to retrieve historical Positions held on a given date.
  *
  * @param {String} token - OAuth token for a user
- * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
  * @param {Object} params.accound_id - Required account_id param
  *
  * @returns {Promise} Fetch promise which will resolve with the account positions
@@ -262,7 +262,7 @@ const listPositions = (appCredentials) => {
  * Lists all Transactions. The number of Transactions can be potentially prohibitively large, the results are paginated. By default, the API will return the 250 latest transactions in the last 30 days.
  *
  * @param {String} token - OAuth token for a user
- * @param {Object} [params] - Optional filter params, see Wealthsimple website
+ * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
  * @param {Object} params.accound_id - Required account_id param
  *
  * @returns {Promise} Fetch promise which will resolve with the account transactions
