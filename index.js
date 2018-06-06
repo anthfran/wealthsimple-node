@@ -1,16 +1,12 @@
 const fetch = require('node-fetch');
+const queryString = require('query-string');
 
 const sandboxUrl = "https://api.sandbox.wealthsimple.com/v1";
 
-const paramsReducer = (accumulator, currentValue) => accumulator + currentValue + "&";
-
-const buildUrlParams = (params) => {
-  return Object.keys(params).map(key=>key + "=" + params[key]).reduce(paramsReducer, "?");
-}
-
 const request = (appCredentials, api, token, params, body) => {
-  const postParams = buildUrlParams(Object.assign({}, appCredentials, params));
-  return fetch(sandboxUrl + api.url + postParams, {
+  const postParams = queryString.stringify(Object.assign({}, appCredentials, params));
+  console.log(sandboxUrl + api.url + "?" + postParams);
+  return fetch(sandboxUrl + api.url + "?" + postParams, {
     method: api.method,
     headers: {
       'Accept': 'application/json',
@@ -20,15 +16,11 @@ const request = (appCredentials, api, token, params, body) => {
     body: JSON.stringify(body)
   })
   .then(response => {
-    if (!response.ok) {
-      let error = response.status + " " + response.statusText
-      throw Error(error)
-    }
-    else return response.json()
+    return response.json()
   });
 }
 
-const healthCheck = request({}, {url:'/healthcheck', method:"GET"});
+// const healthCheck = request({}, {url:'/healthcheck', method:"GET"});
 
 /**
  * Exchanges an auth code for OAuth2 tokens
@@ -363,7 +355,7 @@ module.exports = {
     && typeof appCredentials.client_secret === "string"
     && typeof appCredentials.redirect_uri === "string" ) {
       return {
-        healthCheck: healthCheck,
+        // healthCheck: healthCheck,
         /* AUTH */
         tokenExchange: tokenExchange(appCredentials),
         tokenRefresh: tokenRefresh(appCredentials),
