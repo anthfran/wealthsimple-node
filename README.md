@@ -16,7 +16,7 @@ npm install --save https://github.com/anthfran/wealthsimple-node
 const credentials = {
   "client_id": "XXXXXXXXX",
   "client_secret": "XXXXXXXXX",
-  "redirect_uri": "https%3A%2F%2Flocalhost%3A3000%2Fauth"
+  "redirect_uri": "https://localhost:3000/auth"
 };
 const Wealthsimple = require('wealthsimple-node').appId(credentials);
 
