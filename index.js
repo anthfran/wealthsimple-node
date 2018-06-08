@@ -5,7 +5,6 @@ const sandboxUrl = "https://api.sandbox.wealthsimple.com/v1";
 
 const request = (api, token, params, body) => {
   const postParams = queryString.stringify(params);
-
   //debug logging
   console.log("url:", sandboxUrl + api.url + "?" + postParams);
   if (body) console.log("body:", JSON.stringify(body));
@@ -48,7 +47,10 @@ const tokenExchange = (appCredentials) => {
  * wealthsimple.tokenRefresh(refreshToken).then(response=>console.log(response));
  */
 const tokenRefresh = (appCredentials) => {
-  return (refreshToken) => request(appCredentials, {url:'/oauth/token', method:"POST"}, "", {grant_type: "refresh_token", refresh_token: refreshToken});
+  return (refreshToken) => {
+    let postParams = Object.assign({}, appCredentials, {grant_type: "refresh_token", refresh_token: refreshToken});
+    return request({url:'/oauth/token', method:"POST"}, "token", postParams);
+  }
 }
 
 /**
