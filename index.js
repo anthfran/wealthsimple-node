@@ -35,7 +35,7 @@ const request = (api, token, params, body) => {
 const tokenExchange = (appCredentials) => {
   return (code) => {
     let postParams = Object.assign({}, appCredentials, {grant_type: "authorization_code", code: code});
-    return request({url:'/oauth/token', method:"POST"}, "token", postParams);
+    return request({url:'/oauth/token', method:"POST"}, "", postParams);
   }
 }
 
@@ -49,7 +49,7 @@ const tokenExchange = (appCredentials) => {
 const tokenRefresh = (appCredentials) => {
   return (refreshToken) => {
     let postParams = Object.assign({}, appCredentials, {grant_type: "refresh_token", refresh_token: refreshToken});
-    return request({url:'/oauth/token', method:"POST"}, "token", postParams);
+    return request({url:'/oauth/token', method:"POST"}, "", postParams);
   }
 }
 
@@ -63,7 +63,7 @@ const tokenRefresh = (appCredentials) => {
  * wealthsimple.createUser(body).then(response=>console.log(response));
  */
 const createUser = (appCredentials) => {
-  return (body) => request(appCredentials, {url:'/users', method:"POST"}, "", {}, body);
+  return (body) => return request({url:'/users', method:"POST"}, "", appCredentials, body);
 }
 
 /**
