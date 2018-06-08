@@ -3,9 +3,13 @@ const queryString = require('query-string');
 
 const sandboxUrl = "https://api.sandbox.wealthsimple.com/v1";
 
-const request = (appCredentials, api, token, params, body) => {
-  const postParams = queryString.stringify(Object.assign({}, appCredentials, params));
-  console.log(sandboxUrl + api.url + "?" + postParams);
+const request = (api, token, params, body) => {
+  const postParams = queryString.stringify(params);
+
+  //debug logging
+  console.log("url:", sandboxUrl + api.url + "?" + postParams);
+  if (body) console.log("body:", JSON.stringify(body));
+
   return fetch(sandboxUrl + api.url + "?" + postParams, {
     method: api.method,
     headers: {
@@ -30,7 +34,10 @@ const request = (appCredentials, api, token, params, body) => {
  * wealthsimple.tokenExchange(authCode).then(response=>console.log(response));
  */
 const tokenExchange = (appCredentials) => {
-  return (code) => request(appCredentials, {url:'/oauth/token', method:"POST"}, "", {grant_type: "authorization_code", code: code});
+  return (code) => {
+    let postParams = Object.assign({}, appCredentials, {grant_type: "authorization_code", code: code});
+    return request({url:'/oauth/token', method:"POST"}, "token", postParams);
+  }
 }
 
 /**
@@ -316,7 +323,7 @@ const listBankAccounts = (appCredentials) => {
  * wealthsimple.createDeposit(token, body).then(response=>console.log(response));
  */
 const createDeposit = (appCredentials) => {
-  return (token, body) => request(appCredentials, {url:'/deposits', method:"POST"}, token, {}, body);
+  return (token, body) => request({}, {url:'/deposits', method:"POST"}, token, {}, body);
 }
 
 /**
@@ -363,6 +370,8 @@ module.exports = {
         createUser: createUser(appCredentials),
         listUsers: listUsers(appCredentials),
         getUser: getUser(appCredentials),
+        /* PEOPLE */
+        listPeople: listPeople(appCredentials),
         /* ACCOUNTS */
         listAccounts: listAccounts(appCredentials),
         getAccount: getAccount(appCredentials),
