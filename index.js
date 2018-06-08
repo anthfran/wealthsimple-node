@@ -139,8 +139,8 @@ const listPeople = () => {
  * @example
  * wealthsimple.getPerson(token, "person-12398ud").then(response=>console.log(response));
  */
-const getPerson = (appCredentials) => {
-  return (token, personId) => request(appCredentials, {url:'/people/' + personId, method:"POST"}, token);
+const getPerson = () => {
+  return (token, personId) => request({url:'/people/' + personId, method:"POST"}, token);
 }
 /**
  * Update Person
@@ -154,8 +154,8 @@ const getPerson = (appCredentials) => {
  * @example
  * wealthsimple.updatePerson(token, "person-12398ud", body).then(response=>console.log(response));
  */
-const updatePerson = (appCredentials) => {
-  return (token, personId, body) => request(appCredentials, {url:'/people/' + personId, method:"PATCH"}, token, {}, body);
+const updatePerson = () => {
+  return (token, personId, body) => request({url:'/people/' + personId, method:"PATCH"}, token, {}, body);
 }
 
 /**
@@ -170,8 +170,8 @@ const updatePerson = (appCredentials) => {
  * @example
  * wealthsimple.createAccount(token, body).then(response=>console.log(response));
  */
-const createAccount = (appCredentials) => {
-  return (token, body) => request(appCredentials, {url:'/accounts', method:"POST"}, token, {}, body);
+const createAccount = () => {
+  return (token, body) => request({url:'/accounts', method:"POST"}, token, {}, body);
 }
 
 /**
@@ -186,8 +186,8 @@ const createAccount = (appCredentials) => {
  * @example
  * wealthsimple.listAccounts(token,params).then(response=>console.log(response));
  */
-const listAccounts = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/accounts', method:"GET"}, token, params);
+const listAccounts = () => {
+  return (token, params) => request({url:'/accounts', method:"GET"}, token, params);
 }
 
 /**
@@ -202,8 +202,8 @@ const listAccounts = (appCredentials) => {
  * @example
  * wealthsimple.getAccount(token,accountId).then(response=>console.log(response));
  */
-const getAccount = (appCredentials) => {
-  return (token, accountId) => request(appCredentials, {url:'/accounts/' + accountId, method:"GET"}, token);
+const getAccount = () => {
+  return (token, accountId) => request({url:'/accounts/' + accountId, method:"GET"}, token);
 }
 
 /**
@@ -219,8 +219,8 @@ const getAccount = (appCredentials) => {
  * @example
  * wealthsimple.getAccountTypes(token,params).then(response=>console.log(response));
  */
-const getAccountTypes = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/accounts/account_types', method:"GET"}, token, params);
+const getAccountTypes = () => {
+  return (token, params) => request({url:'/accounts/account_types', method:"GET"}, token, params);
 }
 
 /**
@@ -236,8 +236,8 @@ const getAccountTypes = (appCredentials) => {
  * @example
  * wealthsimple.getDailyValues(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
-const getDailyValues = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/daily_values/', method:"GET"}, token, params);
+const getDailyValues = () => {
+  return (token, params) => request({url:'/daily_values/', method:"GET"}, token, params);
 }
 
 /**
@@ -253,8 +253,8 @@ const getDailyValues = (appCredentials) => {
  * @example
  * wealthsimple.listPositions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
-const listPositions = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/positions/', method:"GET"}, token, params);
+const listPositions = () => {
+  return (token, params) => request({url:'/positions/', method:"GET"}, token, params);
 }
 
 /**
@@ -270,8 +270,8 @@ const listPositions = (appCredentials) => {
  * @example
  * wealthsimple.listTransactions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
-const listTransactions = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/transactions/', method:"GET"}, token, params);
+const listTransactions = () => {
+  return (token, params) => request({url:'/transactions/', method:"GET"}, token, params);
 }
 
 /**
@@ -290,8 +290,8 @@ const listTransactions = (appCredentials) => {
  * @example
  * wealthsimple.getProjection(token, params).then(response=>console.log(response));
  */
-const getProjection = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/projections', method:"GET"}, token, params);
+const getProjection = () => {
+  return (token, params) => request({url:'/projections', method:"GET"}, token, params);
 }
 
 
@@ -305,8 +305,8 @@ const getProjection = (appCredentials) => {
  * @example
  * wealthsimple.listBankAccounts(token, params).then(response=>console.log(response));
  */
-const listBankAccounts = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/bank_accounts', method:"GET"}, token, params);
+const listBankAccounts = () => {
+  return (token, params) => request({url:'/bank_accounts', method:"GET"}, token, params);
 }
 
 /**
@@ -324,8 +324,8 @@ const listBankAccounts = (appCredentials) => {
  * @example
  * wealthsimple.createDeposit(token, body).then(response=>console.log(response));
  */
-const createDeposit = (appCredentials) => {
-  return (token, body) => request({}, {url:'/deposits', method:"POST"}, token, {}, body);
+const createDeposit = () => {
+  return (token, body) => request({url:'/deposits', method:"POST"}, token, {}, body);
 }
 
 /**
@@ -338,8 +338,8 @@ const createDeposit = (appCredentials) => {
  * @example
  * wealthsimple.listDeposits(token, body).then(response=>console.log(response));
  */
-const listDeposits = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/deposits', method:"GET"}, token, params);
+const listDeposits = () => {
+  return (token, params) => request({url:'/deposits', method:"GET"}, token, params);
 }
 
 /**
@@ -353,8 +353,8 @@ const listDeposits = (appCredentials) => {
  * let fundsTransferId = "funds_transfer_id-r3e9c1w";
  * wealthsimple.getDeposit(token, fundsTransferId).then(response=>console.log(response));
  */
-const getDeposit = (appCredentials) => {
-  return (token, fundsTransferId) => request(appCredentials, {url:'/deposits/' + depositId, method:"GET"}, token);
+const getDeposit = () => {
+  return (token, fundsTransferId) => request({url:'/deposits/' + depositId, method:"GET"}, token);
 }
 
 
@@ -375,23 +375,23 @@ module.exports = {
         /* PEOPLE */
         listPeople: listPeople(),
         /* ACCOUNTS */
-        listAccounts: listAccounts(appCredentials),
-        getAccount: getAccount(appCredentials),
-        getAccountTypes: getAccountTypes(appCredentials),
+        listAccounts: listAccounts(),
+        getAccount: getAccount(),
+        getAccountTypes: getAccountTypes(),
         /* DAILY VALUES */
-        getDailyValues: getDailyValues(appCredentials),
+        getDailyValues: getDailyValues(),
         /* POSITIONS */
-        listPositions: listPositions(appCredentials),
+        listPositions: listPositions(),
         /* TRANSACTIONS */
-        listTransactions: listTransactions(appCredentials),
+        listTransactions: listTransactions(),
         /* PROJECTIONS */
-        getProjection: getProjection(appCredentials),
+        getProjection: getProjection(),
         /* BANK ACCOUNTS */
-        listBankAccounts: listBankAccounts(appCredentials),
+        listBankAccounts: listBankAccounts(),
         /* DEPOSITS */
-        createDeposit: createDeposit(appCredentials),
-        listDeposits: listDeposits(appCredentials),
-        getDeposit: getDeposit(appCredentials),
+        createDeposit: createDeposit(),
+        listDeposits: listDeposits(),
+        getDeposit: getDeposit(),
       };
     } else {
       console.log("Credentials:", appCredentials);
