@@ -110,8 +110,8 @@ const getUser = () => {
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
  */
-const createPerson = (appCredentials) => {
-  return (token, body) => request(appCredentials, {url:'/people', method:"POST"}, token, {}, body);
+const createPerson = () => {
+  return (token, body) => request({url:'/people', method:"POST"}, token, {}, body);
 }
 /**
  * List People
@@ -124,8 +124,8 @@ const createPerson = (appCredentials) => {
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
  */
-const listPeople = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/people', method:"GET"}, token, params);
+const listPeople = () => {
+  return (token, params) => request({url:'/people', method:"GET"}, token, params);
 }
 
 /**
@@ -373,7 +373,7 @@ module.exports = {
         listUsers: listUsers(),
         getUser: getUser(),
         /* PEOPLE */
-        listPeople: listPeople(appCredentials),
+        listPeople: listPeople(),
         /* ACCOUNTS */
         listAccounts: listAccounts(appCredentials),
         getAccount: getAccount(appCredentials),
