@@ -63,7 +63,7 @@ const tokenRefresh = (appCredentials) => {
  * wealthsimple.createUser(body).then(response=>console.log(response));
  */
 const createUser = (appCredentials) => {
-  return (body) => return request({url:'/users', method:"POST"}, "", appCredentials, body);
+  return (body) => request({url:'/users', method:"POST"}, "", appCredentials, body);
 }
 
 /**
@@ -82,7 +82,10 @@ const createUser = (appCredentials) => {
  * wealthsimple.listUsers(token, params).then(response=>console.log(response));
  */
 const listUsers = (appCredentials) => {
-  return (token, params) => request(appCredentials, {url:'/users', method:"GET"}, token, params);
+  return (token, params) => {
+    let postParams = Object.assign({}, appCredentials, params);
+    return request({url:'/users', method:"GET"}, token, postParams);
+  }
 }
 
 /**
