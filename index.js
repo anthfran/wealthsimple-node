@@ -81,11 +81,8 @@ const createUser = (appCredentials) => {
  * let params = { limit: 25, offset: 50, created_before: "2017-06-21"};
  * wealthsimple.listUsers(token, params).then(response=>console.log(response));
  */
-const listUsers = (appCredentials) => {
-  return (token, params) => {
-    let postParams = Object.assign({}, appCredentials, params);
-    return request({url:'/users', method:"GET"}, token, postParams);
-  }
+const listUsers = () => {
+  return (token, params) => request({url:'/users', method:"GET"}, token, params);
 }
 
 /**
@@ -99,8 +96,8 @@ const listUsers = (appCredentials) => {
  * @example
  * wealthsimple.getUser(token, userId).then(response=>console.log(response));
  */
-const getUser = (appCredentials) => {
-  return (token, userId) => request(appCredentials, {url:'/users/' + userId, method:"GET"}, token);
+const getUser = () => {
+  return (token, userId) => request({url:'/users/' + userId, method:"GET"}, token);
 }
 
 /**
@@ -373,8 +370,8 @@ module.exports = {
         tokenRefresh: tokenRefresh(appCredentials),
         /* USERS */
         createUser: createUser(appCredentials),
-        listUsers: listUsers(appCredentials),
-        getUser: getUser(appCredentials),
+        listUsers: listUsers(),
+        getUser: getUser(),
         /* PEOPLE */
         listPeople: listPeople(appCredentials),
         /* ACCOUNTS */
