@@ -18,7 +18,7 @@ const credentials = {
   "client_secret": "XXXXXXXXX",
   "redirect_uri": "https://localhost:3000/auth"
 };
-const Wealthsimple = require('wealthsimple-node').appId(credentials);
+const wealthsimple = require('wealthsimple-node').appId(credentials);
 
 wealthsimple.tokenExchange(authCode)
 .then(tokens => {
