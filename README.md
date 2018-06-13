@@ -2,7 +2,7 @@
 
 Node.js client for Wealthsimple API: https://developers.wealthsimple.com
 
-This is still under development and therefore currently only supports sandbox.
+This is still under development and is a quick implementation for "Hack the 6". There is not functions for every API and they have not all been fully tested. Therefore, it currently only supports sandbox. 
 
 ## Installation
 
