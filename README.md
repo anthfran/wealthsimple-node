@@ -22,7 +22,7 @@ const wealthsimple = require('wealthsimple-node').appId(credentials);
 
 wealthsimple.tokenExchange(authCode)
 .then(tokens => {
-  return Wealthsimple.listAccounts(tokens.access_token)
+  return wealthsimple.listAccounts(tokens.access_token)
 })
 .then(accountResponse => {
   console.log(accountResponse);
