@@ -43,8 +43,8 @@ const tokenExchange = (appCredentials) => {
  * wealthsimple.tokenRefresh(refreshToken).then(response=>console.log(response));
  */
 const tokenRefresh = (appCredentials) => {
-  return (refreshToken) => {
-    let postParams = Object.assign({}, appCredentials, {grant_type: "refresh_token", refresh_token: refreshToken});
+  return (tokens) => {
+    let postParams = Object.assign({}, appCredentials, {grant_type: "refresh_token", refresh_token: tokens.refresh_token});
     return request({url:'/oauth/token', method:"POST"}, "", postParams);
   }
 }
@@ -95,7 +95,7 @@ const createUser = (appCredentials) => {
  * wealthsimple.listUsers(token, params).then(response=>console.log(response));
  */
 const listUsers = () => {
-  return (token, params) => request({url:'/users', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/users', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -110,7 +110,7 @@ const listUsers = () => {
  * wealthsimple.getUser(token, userId).then(response=>console.log(response));
  */
 const getUser = () => {
-  return (token, userId) => request({url:'/users/' + userId, method:"GET"}, token);
+  return (tokens, userId) => request({url:'/users/' + userId, method:"GET"}, tokens.access_token);
 }
 
 /**
@@ -124,7 +124,7 @@ const getUser = () => {
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
  */
 const createPerson = () => {
-  return (token, body) => request({url:'/people', method:"POST"}, token, {}, body);
+  return (tokens, body) => request({url:'/people', method:"POST"}, tokens.access_token, {}, body);
 }
 /**
  * List People
@@ -138,7 +138,7 @@ const createPerson = () => {
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
  */
 const listPeople = () => {
-  return (token, params) => request({url:'/people', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/people', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -153,7 +153,7 @@ const listPeople = () => {
  * wealthsimple.getPerson(token, "person-12398ud").then(response=>console.log(response));
  */
 const getPerson = () => {
-  return (token, personId) => request({url:'/people/' + personId, method:"POST"}, token);
+  return (tokens, personId) => request({url:'/people/' + personId, method:"POST"}, tokens.access_token);
 }
 /**
  * Update Person
@@ -168,7 +168,7 @@ const getPerson = () => {
  * wealthsimple.updatePerson(token, "person-12398ud", body).then(response=>console.log(response));
  */
 const updatePerson = () => {
-  return (token, personId, body) => request({url:'/people/' + personId, method:"PATCH"}, token, {}, body);
+  return (tokens, personId, body) => request({url:'/people/' + personId, method:"PATCH"}, tokens.access_token, {}, body);
 }
 
 /**
@@ -184,7 +184,7 @@ const updatePerson = () => {
  * wealthsimple.createAccount(token, body).then(response=>console.log(response));
  */
 const createAccount = () => {
-  return (token, body) => request({url:'/accounts', method:"POST"}, token, {}, body);
+  return (tokens, body) => request({url:'/accounts', method:"POST"}, tokens.access_token, {}, body);
 }
 
 /**
@@ -200,7 +200,7 @@ const createAccount = () => {
  * wealthsimple.listAccounts(token,params).then(response=>console.log(response));
  */
 const listAccounts = () => {
-  return (token, params) => request({url:'/accounts', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/accounts', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -216,7 +216,7 @@ const listAccounts = () => {
  * wealthsimple.getAccount(token,accountId).then(response=>console.log(response));
  */
 const getAccount = () => {
-  return (token, accountId) => request({url:'/accounts/' + accountId, method:"GET"}, token);
+  return (tokens, accountId) => request({url:'/accounts/' + accountId, method:"GET"}, tokens.access_token);
 }
 
 /**
@@ -233,7 +233,7 @@ const getAccount = () => {
  * wealthsimple.getAccountTypes(token,params).then(response=>console.log(response));
  */
 const getAccountTypes = () => {
-  return (token, params) => request({url:'/accounts/account_types', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/accounts/account_types', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -250,7 +250,7 @@ const getAccountTypes = () => {
  * wealthsimple.getDailyValues(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
 const getDailyValues = () => {
-  return (token, params) => request({url:'/daily_values/', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/daily_values/', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -267,7 +267,7 @@ const getDailyValues = () => {
  * wealthsimple.listPositions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
 const listPositions = () => {
-  return (token, params) => request({url:'/positions/', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/positions/', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -284,7 +284,7 @@ const listPositions = () => {
  * wealthsimple.listTransactions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
 const listTransactions = () => {
-  return (token, params) => request({url:'/transactions/', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/transactions/', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -304,7 +304,7 @@ const listTransactions = () => {
  * wealthsimple.getProjection(token, params).then(response=>console.log(response));
  */
 const getProjection = () => {
-  return (token, params) => request({url:'/projections', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/projections', method:"GET"}, tokens.access_token, params);
 }
 
 
@@ -319,7 +319,7 @@ const getProjection = () => {
  * wealthsimple.listBankAccounts(token, params).then(response=>console.log(response));
  */
 const listBankAccounts = () => {
-  return (token, params) => request({url:'/bank_accounts', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/bank_accounts', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -338,7 +338,7 @@ const listBankAccounts = () => {
  * wealthsimple.createDeposit(token, body).then(response=>console.log(response));
  */
 const createDeposit = () => {
-  return (token, body) => request({url:'/deposits', method:"POST"}, token, {}, body);
+  return (tokens, body) => request({url:'/deposits', method:"POST"}, tokens.access_token, {}, body);
 }
 
 /**
@@ -352,7 +352,7 @@ const createDeposit = () => {
  * wealthsimple.listDeposits(token, body).then(response=>console.log(response));
  */
 const listDeposits = () => {
-  return (token, params) => request({url:'/deposits', method:"GET"}, token, params);
+  return (tokens, params) => request({url:'/deposits', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -367,7 +367,7 @@ const listDeposits = () => {
  * wealthsimple.getDeposit(token, fundsTransferId).then(response=>console.log(response));
  */
 const getDeposit = () => {
-  return (token, fundsTransferId) => request({url:'/deposits/' + depositId, method:"GET"}, token);
+  return (tokens, fundsTransferId) => request({url:'/deposits/' + depositId, method:"GET"}, tokens.access_token);
 }
 
 
