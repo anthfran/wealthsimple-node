@@ -373,15 +373,17 @@ const getDeposit = (host) => {
   return (tokens, fundsTransferId) => request(host, {url:'/deposits/' + depositId, method:"GET"}, tokens.access_token);
 }
 
+const useHost = (env) => {
+  if (env === "sandbox" || env === "production") return HOSTS[env]
+  else return HOSTS["sandbox"]
+}
 
 module.exports = {
   appId(appCredentials, env) {
     if (typeof appCredentials.client_id === "string"
     && typeof appCredentials.client_secret === "string"
     && typeof appCredentials.redirect_uri === "string") {
-      let host;
-      if (env === "sandbox" || env === "production") host = HOSTS[env]
-      else host = HOSTS["sandbox"]
+      let host = useHost(env);
       return {
         healthcheck: healthcheck(host),
         /* AUTH */
