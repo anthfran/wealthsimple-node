@@ -1,6 +1,4 @@
 const rp = require('request-promise-native');
-const queryString = require('query-string');
-
 const sandboxUrl = "https://api.sandbox.wealthsimple.com/v1";
 
 const request = (api, token, params, body) => {
@@ -19,7 +17,9 @@ const request = (api, token, params, body) => {
   return rp(options)
 }
 
-const healthCheck = request({}, {url:'/healthcheck', method:"GET"});
+const healthcheck = () => {
+  return request({url:'/healthcheck', method:"GET"})
+}
 
 /**
  * Exchanges an auth code for OAuth2 tokens
@@ -46,6 +46,23 @@ const tokenRefresh = (appCredentials) => {
   return (refreshToken) => {
     let postParams = Object.assign({}, appCredentials, {grant_type: "refresh_token", refresh_token: refreshToken});
     return request({url:'/oauth/token', method:"POST"}, "", postParams);
+  }
+}
+
+/**
+ * If the token is not expired, return the tokens object. Otherwise refreshes the tokens
+ *
+ * @param {Object} tokens
+ * @returns {Object} tokens
+ */
+const refreshTokenIfExpired =  (appCredentials) => {
+  return async (tokens) => {
+    if (!_isTokenExpired(tokens)) return tokens
+    else {
+      console.log(tokens.refresh_token);
+      let postParams = Object.assign({}, appCredentials, {grant_type: "refresh_token", refresh_token: tokens.refresh_token});
+      return request({url:'/oauth/token', method:"POST"}, "", postParams);
+    }
   }
 }
 
@@ -360,10 +377,11 @@ module.exports = {
     && typeof appCredentials.client_secret === "string"
     && typeof appCredentials.redirect_uri === "string" ) {
       return {
-        // healthCheck: healthCheck,
+        healthcheck: healthcheck,
         /* AUTH */
         tokenExchange: tokenExchange(appCredentials),
         tokenRefresh: tokenRefresh(appCredentials),
+        refreshTokenIfExpired: refreshTokenIfExpired(appCredentials),
         /* USERS */
         createUser: createUser(appCredentials),
         listUsers: listUsers(),
@@ -395,4 +413,18 @@ module.exports = {
     }
 
   }
+}
+
+
+/**
+ * Is Token Expired
+ * Determines if an access tokens is expired
+ *
+ * @param {Number} expiry - Datetime of when the token expires
+ * @returns {Boolean} Returns true if the token is epxired
+ */
+const _isTokenExpired = (tokens) => {
+  const expiry = 1000*(tokens.created_at + tokens.expires_in);
+  if (expiry < Date.now()) return true
+  else return false
 }
