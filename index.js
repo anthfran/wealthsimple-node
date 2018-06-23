@@ -1,29 +1,25 @@
-const fetch = require('node-fetch');
+const rp = require('request-promise-native');
 const queryString = require('query-string');
 
 const sandboxUrl = "https://api.sandbox.wealthsimple.com/v1";
 
 const request = (api, token, params, body) => {
-  const postParams = queryString.stringify(params);
-  //debug logging
-  console.log("url:", sandboxUrl + api.url + "?" + postParams);
-  if (body) console.log("body:", JSON.stringify(body));
-
-  return fetch(sandboxUrl + api.url + "?" + postParams, {
+  const options = {
+    uri: sandboxUrl+api.url,
     method: api.method,
+    qs: params,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + token
     },
-    body: JSON.stringify(body)
-  })
-  .then(response => {
-    return response.json()
-  });
+    body: body,
+    json: true // Automatically parses the JSON string in the response
+  };
+  return rp(options)
 }
 
-// const healthCheck = request({}, {url:'/healthcheck', method:"GET"});
+const healthCheck = request({}, {url:'/healthcheck', method:"GET"});
 
 /**
  * Exchanges an auth code for OAuth2 tokens
