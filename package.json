@@ -10,7 +10,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^2.1.2",
-    "query-string": "^6.1.0"
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5"
   }
 }
