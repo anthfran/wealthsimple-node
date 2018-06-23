@@ -19,7 +19,9 @@ const request = (api, token, params, body) => {
   return rp(options)
 }
 
-const healthCheck = request({}, {url:'/healthcheck', method:"GET"});
+const healthcheck = () => {
+  return request({url:'/healthcheck', method:"GET"})
+}
 
 /**
  * Exchanges an auth code for OAuth2 tokens
@@ -360,7 +362,7 @@ module.exports = {
     && typeof appCredentials.client_secret === "string"
     && typeof appCredentials.redirect_uri === "string" ) {
       return {
-        // healthCheck: healthCheck,
+        healthcheck: healthcheck,
         /* AUTH */
         tokenExchange: tokenExchange(appCredentials),
         tokenRefresh: tokenRefresh(appCredentials),
