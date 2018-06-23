@@ -1,9 +1,10 @@
 const rp = require('request-promise-native');
-const sandboxUrl = "https://api.sandbox.wealthsimple.com/v1";
+const HOSTS = require('./hosts');
 
-const request = (api, token, params, body) => {
+const request = (host, api, token, params, body) => {
+  console.log(host);
   const options = {
-    uri: sandboxUrl+api.url,
+    uri: host + api.url,
     method: api.method,
     qs: params,
     headers: {
@@ -17,8 +18,10 @@ const request = (api, token, params, body) => {
   return rp(options)
 }
 
-const healthcheck = () => {
-  return request({url:'/healthcheck', method:"GET"})
+const healthcheck = (host) => {
+  return () => {
+    return request(host, {url:'/healthcheck', method:"GET"})
+  }
 }
 
 /**
@@ -28,10 +31,10 @@ const healthcheck = () => {
  * @example
  * wealthsimple.tokenExchange(authCode).then(response=>console.log(response));
  */
-const tokenExchange = (appCredentials) => {
+const tokenExchange = (host, appCredentials) => {
   return (code) => {
     let postParams = Object.assign({}, appCredentials, {grant_type: "authorization_code", code: code});
-    return request({url:'/oauth/token', method:"POST"}, "", postParams);
+    return request(host, {url:'/oauth/token', method:"POST"}, "", postParams);
   }
 }
 
@@ -42,10 +45,10 @@ const tokenExchange = (appCredentials) => {
  * @example
  * wealthsimple.tokenRefresh(refreshToken).then(response=>console.log(response));
  */
-const tokenRefresh = (appCredentials) => {
+const tokenRefresh = (host, appCredentials) => {
   return (tokens) => {
     let postParams = Object.assign({}, appCredentials, {grant_type: "refresh_token", refresh_token: tokens.refresh_token});
-    return request({url:'/oauth/token', method:"POST"}, "", postParams);
+    return request(host, {url:'/oauth/token', method:"POST"}, "", postParams);
   }
 }
 
@@ -55,13 +58,13 @@ const tokenRefresh = (appCredentials) => {
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @returns {Object} tokens - Tokens object from Wealthsimple
  */
-const refreshTokenIfExpired =  (appCredentials) => {
+const refreshTokenIfExpired =  (host, appCredentials) => {
   return async (tokens) => {
     if (!_isTokenExpired(tokens)) return tokens
     else {
       console.log(tokens.refresh_token);
       let postParams = Object.assign({}, appCredentials, {grant_type: "refresh_token", refresh_token: tokens.refresh_token});
-      return request({url:'/oauth/token', method:"POST"}, "", postParams);
+      return request(host, {url:'/oauth/token', method:"POST"}, "", postParams);
     }
   }
 }
@@ -75,8 +78,8 @@ const refreshTokenIfExpired =  (appCredentials) => {
  * @example
  * wealthsimple.createUser(body).then(response=>console.log(response));
  */
-const createUser = (appCredentials) => {
-  return (body) => request({url:'/users', method:"POST"}, "", appCredentials, body);
+const createUser = (host, appCredentials) => {
+  return (body) => request(host, {url:'/users', method:"POST"}, "", appCredentials, body);
 }
 
 /**
@@ -94,8 +97,8 @@ const createUser = (appCredentials) => {
  * let params = { limit: 25, offset: 50, created_before: "2017-06-21"};
  * wealthsimple.listUsers(token, params).then(response=>console.log(response));
  */
-const listUsers = () => {
-  return (tokens, params) => request({url:'/users', method:"GET"}, tokens.access_token, params);
+const listUsers = (host) => {
+  return (tokens, params) => request(host, {url:'/users', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -109,8 +112,8 @@ const listUsers = () => {
  * @example
  * wealthsimple.getUser(token, userId).then(response=>console.log(response));
  */
-const getUser = () => {
-  return (tokens, userId) => request({url:'/users/' + userId, method:"GET"}, tokens.access_token);
+const getUser = (host) => {
+  return (tokens, userId) => request(host, {url:'/users/' + userId, method:"GET"}, tokens.access_token);
 }
 
 /**
@@ -123,8 +126,8 @@ const getUser = () => {
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
  */
-const createPerson = () => {
-  return (tokens, body) => request({url:'/people', method:"POST"}, tokens.access_token, {}, body);
+const createPerson = (host) => {
+  return (tokens, body) => request(host, {url:'/people', method:"POST"}, tokens.access_token, {}, body);
 }
 /**
  * List People
@@ -137,8 +140,8 @@ const createPerson = () => {
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
  */
-const listPeople = () => {
-  return (tokens, params) => request({url:'/people', method:"GET"}, tokens.access_token, params);
+const listPeople = (host) => {
+  return (tokens, params) => request(host, {url:'/people', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -152,8 +155,8 @@ const listPeople = () => {
  * @example
  * wealthsimple.getPerson(token, "person-12398ud").then(response=>console.log(response));
  */
-const getPerson = () => {
-  return (tokens, personId) => request({url:'/people/' + personId, method:"POST"}, tokens.access_token);
+const getPerson = (host) => {
+  return (tokens, personId) => request(host, {url:'/people/' + personId, method:"POST"}, tokens.access_token);
 }
 /**
  * Update Person
@@ -167,8 +170,8 @@ const getPerson = () => {
  * @example
  * wealthsimple.updatePerson(token, "person-12398ud", body).then(response=>console.log(response));
  */
-const updatePerson = () => {
-  return (tokens, personId, body) => request({url:'/people/' + personId, method:"PATCH"}, tokens.access_token, {}, body);
+const updatePerson = (host) => {
+  return (tokens, personId, body) => request(host, {url:'/people/' + personId, method:"PATCH"}, tokens.access_token, {}, body);
 }
 
 /**
@@ -183,8 +186,8 @@ const updatePerson = () => {
  * @example
  * wealthsimple.createAccount(token, body).then(response=>console.log(response));
  */
-const createAccount = () => {
-  return (tokens, body) => request({url:'/accounts', method:"POST"}, tokens.access_token, {}, body);
+const createAccount = (host) => {
+  return (tokens, body) => request(host, {url:'/accounts', method:"POST"}, tokens.access_token, {}, body);
 }
 
 /**
@@ -199,8 +202,8 @@ const createAccount = () => {
  * @example
  * wealthsimple.listAccounts(token,params).then(response=>console.log(response));
  */
-const listAccounts = () => {
-  return (tokens, params) => request({url:'/accounts', method:"GET"}, tokens.access_token, params);
+const listAccounts = (host) => {
+  return (tokens, params) => request(host, {url:'/accounts', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -215,8 +218,8 @@ const listAccounts = () => {
  * @example
  * wealthsimple.getAccount(token,accountId).then(response=>console.log(response));
  */
-const getAccount = () => {
-  return (tokens, accountId) => request({url:'/accounts/' + accountId, method:"GET"}, tokens.access_token);
+const getAccount = (host) => {
+  return (tokens, accountId) => request(host, {url:'/accounts/' + accountId, method:"GET"}, tokens.access_token);
 }
 
 /**
@@ -232,8 +235,8 @@ const getAccount = () => {
  * @example
  * wealthsimple.getAccountTypes(token,params).then(response=>console.log(response));
  */
-const getAccountTypes = () => {
-  return (tokens, params) => request({url:'/accounts/account_types', method:"GET"}, tokens.access_token, params);
+const getAccountTypes = (host) => {
+  return (tokens, params) => request(host, {url:'/accounts/account_types', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -249,8 +252,8 @@ const getAccountTypes = () => {
  * @example
  * wealthsimple.getDailyValues(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
-const getDailyValues = () => {
-  return (tokens, params) => request({url:'/daily_values/', method:"GET"}, tokens.access_token, params);
+const getDailyValues = (host) => {
+  return (tokens, params) => request(host, {url:'/daily_values/', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -266,8 +269,8 @@ const getDailyValues = () => {
  * @example
  * wealthsimple.listPositions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
-const listPositions = () => {
-  return (tokens, params) => request({url:'/positions/', method:"GET"}, tokens.access_token, params);
+const listPositions = (host) => {
+  return (tokens, params) => request(host, {url:'/positions/', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -283,8 +286,8 @@ const listPositions = () => {
  * @example
  * wealthsimple.listTransactions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
-const listTransactions = () => {
-  return (tokens, params) => request({url:'/transactions/', method:"GET"}, tokens.access_token, params);
+const listTransactions = (host) => {
+  return (tokens, params) => request(host, {url:'/transactions/', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -303,8 +306,8 @@ const listTransactions = () => {
  * @example
  * wealthsimple.getProjection(token, params).then(response=>console.log(response));
  */
-const getProjection = () => {
-  return (tokens, params) => request({url:'/projections', method:"GET"}, tokens.access_token, params);
+const getProjection = (host) => {
+  return (tokens, params) => request(host, {url:'/projections', method:"GET"}, tokens.access_token, params);
 }
 
 
@@ -318,8 +321,8 @@ const getProjection = () => {
  * @example
  * wealthsimple.listBankAccounts(token, params).then(response=>console.log(response));
  */
-const listBankAccounts = () => {
-  return (tokens, params) => request({url:'/bank_accounts', method:"GET"}, tokens.access_token, params);
+const listBankAccounts = (host) => {
+  return (tokens, params) => request(host, {url:'/bank_accounts', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -337,8 +340,8 @@ const listBankAccounts = () => {
  * @example
  * wealthsimple.createDeposit(token, body).then(response=>console.log(response));
  */
-const createDeposit = () => {
-  return (tokens, body) => request({url:'/deposits', method:"POST"}, tokens.access_token, {}, body);
+const createDeposit = (host) => {
+  return (tokens, body) => request(host, {url:'/deposits', method:"POST"}, tokens.access_token, {}, body);
 }
 
 /**
@@ -351,8 +354,8 @@ const createDeposit = () => {
  * @example
  * wealthsimple.listDeposits(token, body).then(response=>console.log(response));
  */
-const listDeposits = () => {
-  return (tokens, params) => request({url:'/deposits', method:"GET"}, tokens.access_token, params);
+const listDeposits = (host) => {
+  return (tokens, params) => request(host, {url:'/deposits', method:"GET"}, tokens.access_token, params);
 }
 
 /**
@@ -366,46 +369,49 @@ const listDeposits = () => {
  * let fundsTransferId = "funds_transfer_id-r3e9c1w";
  * wealthsimple.getDeposit(token, fundsTransferId).then(response=>console.log(response));
  */
-const getDeposit = () => {
-  return (tokens, fundsTransferId) => request({url:'/deposits/' + depositId, method:"GET"}, tokens.access_token);
+const getDeposit = (host) => {
+  return (tokens, fundsTransferId) => request(host, {url:'/deposits/' + depositId, method:"GET"}, tokens.access_token);
 }
 
 
 module.exports = {
-  appId(appCredentials) {
+  appId(appCredentials, env) {
     if (typeof appCredentials.client_id === "string"
     && typeof appCredentials.client_secret === "string"
-    && typeof appCredentials.redirect_uri === "string" ) {
+    && typeof appCredentials.redirect_uri === "string") {
+      let host;
+      if (env === "sandbox" || env === "production") host = HOSTS[env]
+      else host = HOSTS["sandbox"]
       return {
-        healthcheck: healthcheck,
+        healthcheck: healthcheck(host),
         /* AUTH */
-        tokenExchange: tokenExchange(appCredentials),
-        tokenRefresh: tokenRefresh(appCredentials),
-        refreshTokenIfExpired: refreshTokenIfExpired(appCredentials),
+        tokenExchange: tokenExchange(host, appCredentials),
+        tokenRefresh: tokenRefresh(host, appCredentials),
+        refreshTokenIfExpired: refreshTokenIfExpired(host, appCredentials),
         /* USERS */
-        createUser: createUser(appCredentials),
-        listUsers: listUsers(),
-        getUser: getUser(),
+        createUser: createUser(host, appCredentials),
+        listUsers: listUsers(host),
+        getUser: getUser(host),
         /* PEOPLE */
-        listPeople: listPeople(),
+        listPeople: listPeople(host),
         /* ACCOUNTS */
-        listAccounts: listAccounts(),
-        getAccount: getAccount(),
-        getAccountTypes: getAccountTypes(),
+        listAccounts: listAccounts(host),
+        getAccount: getAccount(host),
+        getAccountTypes: getAccountTypes(host),
         /* DAILY VALUES */
-        getDailyValues: getDailyValues(),
+        getDailyValues: getDailyValues(host),
         /* POSITIONS */
-        listPositions: listPositions(),
+        listPositions: listPositions(host),
         /* TRANSACTIONS */
-        listTransactions: listTransactions(),
+        listTransactions: listTransactions(host),
         /* PROJECTIONS */
-        getProjection: getProjection(),
+        getProjection: getProjection(host),
         /* BANK ACCOUNTS */
-        listBankAccounts: listBankAccounts(),
+        listBankAccounts: listBankAccounts(host),
         /* DEPOSITS */
-        createDeposit: createDeposit(),
-        listDeposits: listDeposits(),
-        getDeposit: getDeposit(),
+        createDeposit: createDeposit(host),
+        listDeposits: listDeposits(host),
+        getDeposit: getDeposit(host),
       };
     } else {
       console.log("Credentials:", appCredentials);
