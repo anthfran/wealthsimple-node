@@ -12,6 +12,8 @@ npm install --save https://github.com/anthfran/wealthsimple-node
 
 ### Examples of Usage
 
+See /examples folder for more
+
 #### Load wealthsimple-node into your project
 ```
 const credentials = {
