@@ -27,7 +27,7 @@ const healthcheck = (host) => {
 /**
  * Exchanges an auth code for OAuth2 tokens
  * @param {String} code - Auth string from Wealthsimple redirect
- * @returns {Promise} Fetch promise which will resolve containing OAuth2 Tokens
+ * @returns {Promise} Promise which will resolve containing OAuth2 Tokens
  * @example
  * wealthsimple.tokenExchange(authCode).then(response=>console.log(response));
  */
@@ -41,7 +41,7 @@ const tokenExchange = (host, appCredentials) => {
 /**
  * Refreshes OAuth2 tokens
  * @param {Object} tokens - Tokens object from Wealthsimple
- * @returns {Object} tokens - Tokens object from Wealthsimple
+ * @returns {Promise} Promise which will resolve containing OAuth2 Tokens
  * @example
  * wealthsimple.tokenRefresh(refreshToken).then(response=>console.log(response));
  */
@@ -56,7 +56,7 @@ const tokenRefresh = (host, appCredentials) => {
  * If the token is not expired, return the tokens object. Otherwise refreshes the tokens
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
- * @returns {Object} tokens - Tokens object from Wealthsimple
+ * @returns {Promise} Promise which will resolve containing OAuth2 Tokens
  */
 const refreshTokenIfExpired =  (host, appCredentials) => {
   return async (tokens) => {
@@ -74,7 +74,7 @@ const refreshTokenIfExpired =  (host, appCredentials) => {
  * https://developers.wealthsimple.com/#operation/Create%20User
  *
  * @param {Object} body
- * @returns {Promise} Fetch promise which will resolve with newly created user
+ * @returns {Promise} Promise which will resolve with newly created user
  * @example
  * wealthsimple.createUser(body).then(response=>console.log(response));
  */
@@ -89,7 +89,7 @@ const createUser = (host, appCredentials) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {Object} [params] - See Wealthsimple website for an example of the request parameters
- * @returns {Promise} Fetch promise which will resolve with newly created user
+ * @returns {Promise} Promise which will resolve with newly created user
  * @example
  * wealthsimple.listUsers(token).then(response=>console.log(response));
  *
@@ -108,7 +108,7 @@ const listUsers = (host) => {
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {String} userId - Example "user-12398ud"
  *
- * @returns {Promise} Fetch promise which will resolve with user info
+ * @returns {Promise} Promise which will resolve with user info
  * @example
  * wealthsimple.getUser(token, userId).then(response=>console.log(response));
  */
@@ -122,7 +122,7 @@ const getUser = (host) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {Object} body - See Wealthsimple website for an example of the request body
- * @returns {Promise} Fetch promise which will resolve with the created Person
+ * @returns {Promise} Promise which will resolve with the created Person
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
  */
@@ -136,7 +136,7 @@ const createPerson = (host) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {Object} params - See Wealthsimple website for an example of the request parameters
- * @returns {Promise} Fetch promise which will resolve with the list of people
+ * @returns {Promise} Promise which will resolve with the list of people
  * @example
  * wealthsimple.createPerson(token, body).then(response=>console.log(response));
  */
@@ -151,7 +151,7 @@ const listPeople = (host) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {String} personId - Example "person-12398ud"
- * @returns {Promise} Fetch promise which will resolve with the Person details
+ * @returns {Promise} Promise which will resolve with the Person details
  * @example
  * wealthsimple.getPerson(token, "person-12398ud").then(response=>console.log(response));
  */
@@ -166,7 +166,7 @@ const getPerson = (host) => {
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {String} personId - Example "person-12398ud"
  * @param {Object} body - See Wealthsimple website for an example of the body
- * @returns {Promise} Fetch promise which will resolve with the updated Person
+ * @returns {Promise} Promise which will resolve with the updated Person
  * @example
  * wealthsimple.updatePerson(token, "person-12398ud", body).then(response=>console.log(response));
  */
@@ -182,7 +182,7 @@ const updatePerson = (host) => {
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {String} personId - Example "person-12398ud"
  * @param {Object} body - See Wealthsimple website for an example of the body
- * @returns {Promise} Fetch promise which will resolve with the created Account
+ * @returns {Promise} Promise which will resolve with the created Account
  * @example
  * wealthsimple.createAccount(token, body).then(response=>console.log(response));
  */
@@ -196,7 +196,7 @@ const createAccount = (host) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
- * @returns {Promise} Fetch promise which will resolve with the list of accounts
+ * @returns {Promise} Promise which will resolve with the list of accounts
  * @example
  * wealthsimple.listAccounts(token).then(response=>console.log(response));
  * @example
@@ -212,7 +212,7 @@ const listAccounts = (host) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {String} accountId - Account ID String
- * @returns {Promise} Fetch promise which will resolve with the account details
+ * @returns {Promise} Promise which will resolve with the account details
  * @example
  * wealthsimple.listAccounts(token).then(response=>console.log(response));
  * @example
@@ -229,7 +229,7 @@ const getAccount = (host) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
- * @returns {Promise} Fetch promise which will resolve with the account details
+ * @returns {Promise} Promise which will resolve with the account details
  * @example
  * wealthsimple.getAccountTypes(token).then(response=>console.log(response));
  * @example
@@ -248,7 +248,7 @@ const getAccountTypes = (host) => {
  * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
  * @param {Object} params.accound_id - Required account_id param
  *
- * @returns {Promise} Fetch promise which will resolve with the account daily values
+ * @returns {Promise} Promise which will resolve with the account daily values
  * @example
  * wealthsimple.getDailyValues(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
@@ -265,7 +265,7 @@ const getDailyValues = (host) => {
  * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
  * @param {Object} params.accound_id - Required account_id param
  *
- * @returns {Promise} Fetch promise which will resolve with the account positions
+ * @returns {Promise} Promise which will resolve with the account positions
  * @example
  * wealthsimple.listPositions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
@@ -282,7 +282,7 @@ const listPositions = (host) => {
  * @param {Object} [params] - Optional filter params, See Wealthsimple website for an example of the request parameters
  * @param {Object} params.accound_id - Required account_id param
  *
- * @returns {Promise} Fetch promise which will resolve with the account transactions
+ * @returns {Promise} Promise which will resolve with the account transactions
  * @example
  * wealthsimple.listTransactions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
  */
@@ -302,7 +302,7 @@ const listTransactions = (host) => {
  * @param {Object} params.frequency - Required deposit frequency
  * @param {Object} params.start_date - Required deposit start date
  *
- * @returns {Promise} Fetch promise which will resolve with the projection
+ * @returns {Promise} Promise which will resolve with the projection
  * @example
  * wealthsimple.getProjection(token, params).then(response=>console.log(response));
  */
@@ -317,7 +317,7 @@ const getProjection = (host) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {Object} [params] - See website for optional query params
- * @returns {Promise} Fetch promise which will resolve with list of bank accounts
+ * @returns {Promise} Promise which will resolve with list of bank accounts
  * @example
  * wealthsimple.listBankAccounts(token, params).then(response=>console.log(response));
  */
@@ -336,7 +336,7 @@ const listBankAccounts = (host) => {
  * @param {Object} body.account_id - The unique id of the Account
  * @param {Object} body.amount - Dollar amount
  * @param {Object} body.currency - Currency
- * @returns {Promise} Fetch promise which will resolve with deposit info
+ * @returns {Promise} Promise which will resolve with deposit info
  * @example
  * wealthsimple.createDeposit(token, body).then(response=>console.log(response));
  */
@@ -350,7 +350,7 @@ const createDeposit = (host) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {Object} [params] - See website for optional query params
- * @returns {Promise} Fetch promise which will resolve with deposit list
+ * @returns {Promise} Promise which will resolve with deposit list
  * @example
  * wealthsimple.listDeposits(token, body).then(response=>console.log(response));
  */
@@ -364,7 +364,7 @@ const listDeposits = (host) => {
  *
  * @param {Object} tokens - Tokens object from Wealthsimple
  * @param {String} fundsTransferId - funds_transfer_id
- * @returns {Promise} Fetch promise which will resolve with a deposit entity.
+ * @returns {Promise} Promise which will resolve with a deposit entity.
  * @example
  * let fundsTransferId = "funds_transfer_id-r3e9c1w";
  * wealthsimple.getDeposit(token, fundsTransferId).then(response=>console.log(response));

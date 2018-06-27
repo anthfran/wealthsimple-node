@@ -2,7 +2,14 @@
 
 Node.js client for Wealthsimple API: https://developers.wealthsimple.com
 
-This is still under development and is a quick implementation for "Hack the 6". There is not functions for every API and they have not all been fully tested. Therefore, it currently only supports sandbox. 
+This uses a functional programming style which provides a function for each individual API implemented.
+
+This is still under development and is a quick implementation for "Hack the 6". There is not functions for every API and they have not all been fully tested. I do not work for Wealthsimple and I do not know if I will ever finish this module.
+
+TODO List:
+* Complete functions for all Wealthsimple API's in v1
+* Break up into multiple files (auth, users, accounts, people, etc) so that you can import less functions if not all are required
+* Unit tests for all the functions
 
 ## Installation
 
@@ -10,23 +17,84 @@ This is still under development and is a quick implementation for "Hack the 6". 
 npm install --save https://github.com/anthfran/wealthsimple-node
 ```
 
-### Example of Usage
+### Examples of Usage
 
-```
+See /examples folder for more
+
+#### Load wealthsimple-node into your project
+```javascript
 const credentials = {
   "client_id": "XXXXXXXXX",
   "client_secret": "XXXXXXXXX",
   "redirect_uri": "https://localhost:3000/auth"
 };
 const wealthsimple = require('wealthsimple-node').appId(credentials);
+```
 
+#### Exchange an auth code for a token object response
+Note: This will return the whole tokens object, some which you may need and some which you may not.
+The only keys that are important to save are:
+* access_token
+* refresh_token
+* created_at
+* expires_in
+
+You can save the entire response if you want. An example below will create a tokens object that can be used by this library.
+```javascript
 wealthsimple.tokenExchange(authCode)
-.then(tokens => {
-  return wealthsimple.listAccounts(tokens.access_token)
+.then(response => {
+  return {
+    access_token: response.access_token,
+    refresh_token: response.refresh_token,
+    created_at: response.created_at,
+    expires_in: response.expires_in
+  }
 })
-.then(accountResponse => {
-  console.log(accountResponse);
-  // do something with response
+.then(tokens => {
+  // store tokens
+})
+.catch(error => {
+  // do something with error
+});
+```
+
+#### Call an API example (List Accounts)
+```javascript
+let params = {};
+wealthsimple.listAccounts(tokens, params);
+})
+.catch(error => {
+  // do something with error
+});
+```
+
+#### Refresh tokens
+
+```javascript
+wealthsimple.tokenRefresh(tokens)
+.then(response => {
+  return {
+    access_token: response.access_token,
+    refresh_token: response.refresh_token,
+    created_at: response.created_at,
+    expires_in: response.expires_in
+  }
+})
+.then(tokens => {
+  // store tokens
+});
+```
+
+#### Utilize "Refresh Token if Expired"
+Note, this will check your tokens object
+```javascript
+wealthsimple.refreshTokenIfExpired(tokens)
+.then(refreshed => {
+  if (tokens.access_token !== refreshed.access_token) {
+    // store new tokens
+  }
+  let params = {}
+  return wealthsimple.listAccounts(tokens, params);
 })
 .catch(error => {
   // do something with error
@@ -39,68 +107,27 @@ wealthsimple.tokenExchange(authCode)
 ### Table of Contents
 
 -   [tokenExchange][1]
-    -   [Parameters][2]
-    -   [Examples][3]
 -   [tokenRefresh][4]
-    -   [Parameters][5]
-    -   [Examples][6]
--   [createUser][7]
-    -   [Parameters][8]
-    -   [Examples][9]
--   [listUsers][10]
-    -   [Parameters][11]
-    -   [Examples][12]
--   [getUser][13]
-    -   [Parameters][14]
-    -   [Examples][15]
--   [createPerson][16]
-    -   [Parameters][17]
-    -   [Examples][18]
--   [listPeople][19]
-    -   [Parameters][20]
-    -   [Examples][21]
--   [getPerson][22]
-    -   [Parameters][23]
-    -   [Examples][24]
--   [updatePerson][25]
-    -   [Parameters][26]
-    -   [Examples][27]
--   [createAccount][28]
-    -   [Parameters][29]
-    -   [Examples][30]
--   [listAccounts][31]
-    -   [Parameters][32]
-    -   [Examples][33]
--   [getAccount][34]
-    -   [Parameters][35]
-    -   [Examples][36]
--   [getAccountTypes][37]
-    -   [Parameters][38]
-    -   [Examples][39]
--   [getDailyValues][40]
-    -   [Parameters][41]
-    -   [Examples][42]
--   [listPositions][43]
-    -   [Parameters][44]
-    -   [Examples][45]
--   [listTransactions][46]
-    -   [Parameters][47]
-    -   [Examples][48]
--   [getProjection][49]
-    -   [Parameters][50]
-    -   [Examples][51]
--   [listBankAccounts][52]
-    -   [Parameters][53]
-    -   [Examples][54]
--   [createDeposit][55]
-    -   [Parameters][56]
-    -   [Examples][57]
--   [listDeposits][58]
-    -   [Parameters][59]
-    -   [Examples][60]
--   [getDeposit][61]
-    -   [Parameters][62]
-    -   [Examples][63]
+-   [refreshTokenIfExpired][7]
+-   [createUser][9]
+-   [listUsers][12]
+-   [getUser][15]
+-   [createPerson][18]
+-   [listPeople][21]
+-   [getPerson][24]
+-   [updatePerson][27]
+-   [createAccount][30]
+-   [listAccounts][33]
+-   [getAccount][36]
+-   [getAccountTypes][39]
+-   [getDailyValues][42]
+-   [listPositions][45]
+-   [listTransactions][48]
+-   [getProjection][51]
+-   [listBankAccounts][54]
+-   [createDeposit][57]
+-   [listDeposits][60]
+-   [getDeposit][63]
 
 ## tokenExchange
 
@@ -108,8 +135,9 @@ Exchanges an auth code for OAuth2 tokens
 
 ### Parameters
 
-
--   `code` **[String][64]** Auth string from Wealthsimple redirect
+-   `host`  
+-   `appCredentials`  
+-   `code` **[String][68]** Auth string from Wealthsimple redirect
 
 ### Examples
 
@@ -117,7 +145,7 @@ Exchanges an auth code for OAuth2 tokens
 wealthsimple.tokenExchange(authCode).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve containing OAuth2 Tokens
+Returns **[Promise][69]** Promise which will resolve containing OAuth2 Tokens
 
 ## tokenRefresh
 
@@ -125,8 +153,9 @@ Refreshes OAuth2 tokens
 
 ### Parameters
 
-
--   `refreshToken` **[String][64]** Refresh Token
+-   `host`  
+-   `appCredentials`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
 
 ### Examples
 
@@ -134,17 +163,30 @@ Refreshes OAuth2 tokens
 wealthsimple.tokenRefresh(refreshToken).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve containing OAuth2 Tokens
+Returns **[Promise][69]** Promise which will resolve containing OAuth2 Tokens
+
+## refreshTokenIfExpired
+
+If the token is not expired, return the tokens object. Otherwise refreshes the tokens
+
+### Parameters
+
+-   `host`  
+-   `appCredentials`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+
+Returns **[Promise][69]** Promise which will resolve containing OAuth2 Tokens
 
 ## createUser
 
 Create a User
-[https://developers.wealthsimple.com/#operation/Create%20User][66]
+[https://developers.wealthsimple.com/#operation/Create%20User][71]
 
 ### Parameters
 
-
--   `body` **[Object][67]**
+-   `host`  
+-   `appCredentials`  
+-   `body` **[Object][70]**
 
 ### Examples
 
@@ -152,19 +194,19 @@ Create a User
 wealthsimple.createUser(body).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with newly created user
+Returns **[Promise][69]** Promise which will resolve with newly created user
 
 ## listUsers
 
 List Users
-[https://developers.wealthsimple.com/#operation/List%20Users][68]
+[https://developers.wealthsimple.com/#operation/List%20Users][72]
 This API will return a list of Users scoped by the authorization credentials.
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** See Wealthsimple website for an example of the request parameters
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]?** See Wealthsimple website for an example of the request parameters
 
 ### Examples
 
@@ -177,18 +219,18 @@ let params = { limit: 25, offset: 50, created_before: "2017-06-21"};
 wealthsimple.listUsers(token, params).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with newly created user
+Returns **[Promise][69]** Promise which will resolve with newly created user
 
 ## getUser
 
 Get User
-[https://developers.wealthsimple.com/#operation/Get%20User][69]
+[https://developers.wealthsimple.com/#operation/Get%20User][73]
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `userId` **[String][64]** Example "user-12398ud"
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `userId` **[String][68]** Example "user-12398ud"
 
 ### Examples
 
@@ -196,18 +238,18 @@ Get User
 wealthsimple.getUser(token, userId).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with user info
+Returns **[Promise][69]** Promise which will resolve with user info
 
 ## createPerson
 
 Create Person
-[https://developers.wealthsimple.com/#operation/Create%20Person][70]
+[https://developers.wealthsimple.com/#operation/Create%20Person][74]
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `body` **[Object][67]** See Wealthsimple website for an example of the request body
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `body` **[Object][70]** See Wealthsimple website for an example of the request body
 
 ### Examples
 
@@ -215,19 +257,19 @@ Create Person
 wealthsimple.createPerson(token, body).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the created Person
+Returns **[Promise][69]** Promise which will resolve with the created Person
 
 ## listPeople
 
 List People
-[https://developers.wealthsimple.com/#operation/List%20People][71]
+[https://developers.wealthsimple.com/#operation/List%20People][75]
 This API will return a list of People scoped by the authorization credentials.
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]** See Wealthsimple website for an example of the request parameters
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]** See Wealthsimple website for an example of the request parameters
 
 ### Examples
 
@@ -235,19 +277,19 @@ This API will return a list of People scoped by the authorization credentials.
 wealthsimple.createPerson(token, body).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the list of people
+Returns **[Promise][69]** Promise which will resolve with the list of people
 
 ## getPerson
 
 Get Person
-[https://developers.wealthsimple.com/#operation/Get%20Person][72]
+[https://developers.wealthsimple.com/#operation/Get%20Person][76]
 Get a Person entity if you know the person_id and the current credentials have access to the Person.
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `personId` **[String][64]** Example "person-12398ud"
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `personId` **[String][68]** Example "person-12398ud"
 
 ### Examples
 
@@ -255,20 +297,20 @@ Get a Person entity if you know the person_id and the current credentials have a
 wealthsimple.getPerson(token, "person-12398ud").then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the Person details
+Returns **[Promise][69]** Promise which will resolve with the Person details
 
 ## updatePerson
 
 Update Person
-[https://developers.wealthsimple.com/#operation/Update%20Person][73]
+[https://developers.wealthsimple.com/#operation/Update%20Person][77]
 You can add/remove information to the Person entity as the information becomes available using this API. To remove a previously set attribute, set the value to null. Attributes that are not mentioned in the request payload will leave the attribute unchanged in the Person entity.
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `personId` **[String][64]** Example "person-12398ud"
--   `body` **[Object][67]** See Wealthsimple website for an example of the body
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `personId` **[String][68]** Example "person-12398ud"
+-   `body` **[Object][70]** See Wealthsimple website for an example of the body
 
 ### Examples
 
@@ -276,20 +318,20 @@ You can add/remove information to the Person entity as the information becomes a
 wealthsimple.updatePerson(token, "person-12398ud", body).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the updated Person
+Returns **[Promise][69]** Promise which will resolve with the updated Person
 
 ## createAccount
 
 Create Account
-[https://developers.wealthsimple.com/#operation/Create%20Account][74]
+[https://developers.wealthsimple.com/#operation/Create%20Account][78]
 You can add/remove information to the Person entity as the information becomes available using this API. To remove a previously set attribute, set the value to null. Attributes that are not mentioned in the request payload will leave the attribute unchanged in the Person entity.
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `personId` **[String][64]** Example "person-12398ud"
--   `body` **[Object][67]** See Wealthsimple website for an example of the body
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `personId` **[String][68]** Example "person-12398ud"
+-   `body` **[Object][70]** See Wealthsimple website for an example of the body
 
 ### Examples
 
@@ -297,18 +339,18 @@ You can add/remove information to the Person entity as the information becomes a
 wealthsimple.createAccount(token, body).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the created Account
+Returns **[Promise][69]** Promise which will resolve with the created Account
 
 ## listAccounts
 
 List Accounts
-[https://developers.wealthsimple.com/#operation/List%20Accounts][75]
+[https://developers.wealthsimple.com/#operation/List%20Accounts][79]
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
 
 ### Examples
 
@@ -320,18 +362,18 @@ wealthsimple.listAccounts(token).then(response=>console.log(response));
 wealthsimple.listAccounts(token,params).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the list of accounts
+Returns **[Promise][69]** Promise which will resolve with the list of accounts
 
 ## getAccount
 
 Get Account
-[https://developers.wealthsimple.com/#operation/Get%20Account][76]
+[https://developers.wealthsimple.com/#operation/Get%20Account][80]
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `accountId` **[String][64]** Account ID String
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `accountId` **[String][68]** Account ID String
 
 ### Examples
 
@@ -343,19 +385,19 @@ wealthsimple.listAccounts(token).then(response=>console.log(response));
 wealthsimple.getAccount(token,accountId).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the account details
+Returns **[Promise][69]** Promise which will resolve with the account details
 
 ## getAccountTypes
 
 Get Account Types
-[https://developers.wealthsimple.com/#operation/Get%20Account%20Types][77]
+[https://developers.wealthsimple.com/#operation/Get%20Account%20Types][81]
 Returns openable account types. If a client_id is provided it will scope the types to the client in question, otherwise it will default to the requestor
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
 
 ### Examples
 
@@ -367,20 +409,20 @@ wealthsimple.getAccountTypes(token).then(response=>console.log(response));
 wealthsimple.getAccountTypes(token,params).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the account details
+Returns **[Promise][69]** Promise which will resolve with the account details
 
 ## getDailyValues
 
 Get Daily Values
-[https://developers.wealthsimple.com/#operation/List%20Daily%20Values][78]
+[https://developers.wealthsimple.com/#operation/List%20Daily%20Values][82]
 Returns historical daily values for a given account. This API will only return a maximum of 365 days worth of daily values from a given start date. By default, it will return historical values for the last 30-days. The start date must occur before the end date if provided. If the difference between the start date and the end date exceeds 365 days, an error will be thrown. The number of Daily Values can be potentially prohibitively large, the results are paginated.
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
-    -   `params.accound_id` **[Object][67]** Required account_id param
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
+    -   `params.accound_id` **[Object][70]** Required account_id param
 
 ### Examples
 
@@ -388,20 +430,20 @@ Returns historical daily values for a given account. This API will only return a
 wealthsimple.getDailyValues(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the account daily values
+Returns **[Promise][69]** Promise which will resolve with the account daily values
 
 ## listPositions
 
 List Positions
-[https://developers.wealthsimple.com/#tag/Positions][79]
+[https://developers.wealthsimple.com/#tag/Positions][83]
 Returns positions for a given account. This API will also allow you to retrieve historical Positions held on a given date.
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
-    -   `params.accound_id` **[Object][67]** Required account_id param
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
+    -   `params.accound_id` **[Object][70]** Required account_id param
 
 ### Examples
 
@@ -409,20 +451,20 @@ Returns positions for a given account. This API will also allow you to retrieve 
 wealthsimple.listPositions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the account positions
+Returns **[Promise][69]** Promise which will resolve with the account positions
 
 ## listTransactions
 
 List Transactions
-[https://developers.wealthsimple.com/#operation/List%20Transactions][80]
+[https://developers.wealthsimple.com/#operation/List%20Transactions][84]
 Lists all Transactions. The number of Transactions can be potentially prohibitively large, the results are paginated. By default, the API will return the 250 latest transactions in the last 30 days.
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** Optional filter params, See Wealthsimple website for an example of the request parameters
-    -   `params.accound_id` **[Object][67]** Required account_id param
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
+    -   `params.accound_id` **[Object][70]** Required account_id param
 
 ### Examples
 
@@ -430,23 +472,23 @@ Lists all Transactions. The number of Transactions can be potentially prohibitiv
 wealthsimple.listTransactions(token,{ params.accound_id: "rrsp-r3e9c1w" }).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the account transactions
+Returns **[Promise][69]** Promise which will resolve with the account transactions
 
 ## getProjection
 
 Get Projection
-[https://developers.wealthsimple.com/#operation/Get%20Projection][81]
+[https://developers.wealthsimple.com/#operation/Get%20Projection][85]
 Retrieves a projections of returns for an account based on deposits and frequency.
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]** Projection params
-    -   `params.accound_id` **[Object][67]** Required account_id param
-    -   `params.amount` **[Object][67]** Required deposit amount
-    -   `params.frequency` **[Object][67]** Required deposit frequency
-    -   `params.start_date` **[Object][67]** Required deposit start date
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]** Projection params
+    -   `params.accound_id` **[Object][70]** Required account_id param
+    -   `params.amount` **[Object][70]** Required deposit amount
+    -   `params.frequency` **[Object][70]** Required deposit frequency
+    -   `params.start_date` **[Object][70]** Required deposit start date
 
 ### Examples
 
@@ -454,18 +496,18 @@ Retrieves a projections of returns for an account based on deposits and frequenc
 wealthsimple.getProjection(token, params).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with the projection
+Returns **[Promise][69]** Promise which will resolve with the projection
 
 ## listBankAccounts
 
 List Bank Accounts
-[https://developers.wealthsimple.com/#operation/List%20Bank%20Accounts][82]
+[https://developers.wealthsimple.com/#operation/List%20Bank%20Accounts][86]
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** See website for optional query params
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]?** See website for optional query params
 
 ### Examples
 
@@ -473,23 +515,23 @@ List Bank Accounts
 wealthsimple.listBankAccounts(token, params).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with list of bank accounts
+Returns **[Promise][69]** Promise which will resolve with list of bank accounts
 
 ## createDeposit
 
 Create Deposit
-[https://developers.wealthsimple.com/#operation/Create%20Deposit][83]
+[https://developers.wealthsimple.com/#operation/Create%20Deposit][87]
 Initiates an electronic funds transfer to deposit funds to an Account from a Bank Account
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `body` **[Object][67]** Required deposit details
-    -   `body.bank_account_id` **[Object][67]** The unique id of the Bank Account
-    -   `body.account_id` **[Object][67]** The unique id of the Account
-    -   `body.amount` **[Object][67]** Dollar amount
-    -   `body.currency` **[Object][67]** Currency
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `body` **[Object][70]** Required deposit details
+    -   `body.bank_account_id` **[Object][70]** The unique id of the Bank Account
+    -   `body.account_id` **[Object][70]** The unique id of the Account
+    -   `body.amount` **[Object][70]** Dollar amount
+    -   `body.currency` **[Object][70]** Currency
 
 ### Examples
 
@@ -497,18 +539,18 @@ Initiates an electronic funds transfer to deposit funds to an Account from a Ban
 wealthsimple.createDeposit(token, body).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with deposit info
+Returns **[Promise][69]** Promise which will resolve with deposit info
 
 ## listDeposits
 
 List Deposits
-[https://developers.wealthsimple.com/#operation/List%20Deposits][84]
+[https://developers.wealthsimple.com/#operation/List%20Deposits][88]
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `params` **[Object][67]?** See website for optional query params
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `params` **[Object][70]?** See website for optional query params
 
 ### Examples
 
@@ -516,18 +558,18 @@ List Deposits
 wealthsimple.listDeposits(token, body).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with deposit list
+Returns **[Promise][69]** Promise which will resolve with deposit list
 
 ## getDeposit
 
 Get Deposit
-[https://developers.wealthsimple.com/#operation/List%20Deposits][84]
+[https://developers.wealthsimple.com/#operation/List%20Deposits][88]
 
 ### Parameters
 
-
--   `token` **[String][64]** OAuth token for a user
--   `fundsTransferId` **[String][64]** funds_transfer_id
+-   `host`  
+-   `tokens` **[Object][70]** Tokens object from Wealthsimple
+-   `fundsTransferId` **[String][68]** funds_transfer_id
 
 ### Examples
 
@@ -536,7 +578,7 @@ let fundsTransferId = "funds_transfer_id-r3e9c1w";
 wealthsimple.getDeposit(token, fundsTransferId).then(response=>console.log(response));
 ```
 
-Returns **[Promise][65]** Fetch promise which will resolve with a deposit entity.
+Returns **[Promise][69]** Promise which will resolve with a deposit entity.
 
 [1]: #tokenexchange
 
@@ -550,158 +592,170 @@ Returns **[Promise][65]** Fetch promise which will resolve with a deposit entity
 
 [6]: #examples-1
 
-[7]: #createuser
+[7]: #refreshtokenifexpired
 
 [8]: #parameters-2
 
-[9]: #examples-2
+[9]: #createuser
 
-[10]: #listusers
+[10]: #parameters-3
 
-[11]: #parameters-3
+[11]: #examples-2
 
-[12]: #examples-3
+[12]: #listusers
 
-[13]: #getuser
+[13]: #parameters-4
 
-[14]: #parameters-4
+[14]: #examples-3
 
-[15]: #examples-4
+[15]: #getuser
 
-[16]: #createperson
+[16]: #parameters-5
 
-[17]: #parameters-5
+[17]: #examples-4
 
-[18]: #examples-5
+[18]: #createperson
 
-[19]: #listpeople
+[19]: #parameters-6
 
-[20]: #parameters-6
+[20]: #examples-5
 
-[21]: #examples-6
+[21]: #listpeople
 
-[22]: #getperson
+[22]: #parameters-7
 
-[23]: #parameters-7
+[23]: #examples-6
 
-[24]: #examples-7
+[24]: #getperson
 
-[25]: #updateperson
+[25]: #parameters-8
 
-[26]: #parameters-8
+[26]: #examples-7
 
-[27]: #examples-8
+[27]: #updateperson
 
-[28]: #createaccount
+[28]: #parameters-9
 
-[29]: #parameters-9
+[29]: #examples-8
 
-[30]: #examples-9
+[30]: #createaccount
 
-[31]: #listaccounts
+[31]: #parameters-10
 
-[32]: #parameters-10
+[32]: #examples-9
 
-[33]: #examples-10
+[33]: #listaccounts
 
-[34]: #getaccount
+[34]: #parameters-11
 
-[35]: #parameters-11
+[35]: #examples-10
 
-[36]: #examples-11
+[36]: #getaccount
 
-[37]: #getaccounttypes
+[37]: #parameters-12
 
-[38]: #parameters-12
+[38]: #examples-11
 
-[39]: #examples-12
+[39]: #getaccounttypes
 
-[40]: #getdailyvalues
+[40]: #parameters-13
 
-[41]: #parameters-13
+[41]: #examples-12
 
-[42]: #examples-13
+[42]: #getdailyvalues
 
-[43]: #listpositions
+[43]: #parameters-14
 
-[44]: #parameters-14
+[44]: #examples-13
 
-[45]: #examples-14
+[45]: #listpositions
 
-[46]: #listtransactions
+[46]: #parameters-15
 
-[47]: #parameters-15
+[47]: #examples-14
 
-[48]: #examples-15
+[48]: #listtransactions
 
-[49]: #getprojection
+[49]: #parameters-16
 
-[50]: #parameters-16
+[50]: #examples-15
 
-[51]: #examples-16
+[51]: #getprojection
 
-[52]: #listbankaccounts
+[52]: #parameters-17
 
-[53]: #parameters-17
+[53]: #examples-16
 
-[54]: #examples-17
+[54]: #listbankaccounts
 
-[55]: #createdeposit
+[55]: #parameters-18
 
-[56]: #parameters-18
+[56]: #examples-17
 
-[57]: #examples-18
+[57]: #createdeposit
 
-[58]: #listdeposits
+[58]: #parameters-19
 
-[59]: #parameters-19
+[59]: #examples-18
 
-[60]: #examples-19
+[60]: #listdeposits
 
-[61]: #getdeposit
+[61]: #parameters-20
 
-[62]: #parameters-20
+[62]: #examples-19
 
-[63]: #examples-20
+[63]: #getdeposit
 
-[64]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[64]: #parameters-21
 
-[65]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[65]: #examples-20
 
-[66]: https://developers.wealthsimple.com/#operation/Create%20User
+[66]: #_istokenexpired
 
-[67]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[67]: #parameters-22
 
-[68]: https://developers.wealthsimple.com/#operation/List%20Users
+[68]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[69]: https://developers.wealthsimple.com/#operation/Get%20User
+[69]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[70]: https://developers.wealthsimple.com/#operation/Create%20Person
+[70]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[71]: https://developers.wealthsimple.com/#operation/List%20People
+[71]: https://developers.wealthsimple.com/#operation/Create%20User
 
-[72]: https://developers.wealthsimple.com/#operation/Get%20Person
+[72]: https://developers.wealthsimple.com/#operation/List%20Users
 
-[73]: https://developers.wealthsimple.com/#operation/Update%20Person
+[73]: https://developers.wealthsimple.com/#operation/Get%20User
 
-[74]: https://developers.wealthsimple.com/#operation/Create%20Account
+[74]: https://developers.wealthsimple.com/#operation/Create%20Person
 
-[75]: https://developers.wealthsimple.com/#operation/List%20Accounts
+[75]: https://developers.wealthsimple.com/#operation/List%20People
 
-[76]: https://developers.wealthsimple.com/#operation/Get%20Account
+[76]: https://developers.wealthsimple.com/#operation/Get%20Person
 
-[77]: https://developers.wealthsimple.com/#operation/Get%20Account%20Types
+[77]: https://developers.wealthsimple.com/#operation/Update%20Person
 
-[78]: https://developers.wealthsimple.com/#operation/List%20Daily%20Values
+[78]: https://developers.wealthsimple.com/#operation/Create%20Account
 
-[79]: https://developers.wealthsimple.com/#tag/Positions
+[79]: https://developers.wealthsimple.com/#operation/List%20Accounts
 
-[80]: https://developers.wealthsimple.com/#operation/List%20Transactions
+[80]: https://developers.wealthsimple.com/#operation/Get%20Account
 
-[81]: https://developers.wealthsimple.com/#operation/Get%20Projection
+[81]: https://developers.wealthsimple.com/#operation/Get%20Account%20Types
 
-[82]: https://developers.wealthsimple.com/#operation/List%20Bank%20Accounts
+[82]: https://developers.wealthsimple.com/#operation/List%20Daily%20Values
 
-[83]: https://developers.wealthsimple.com/#operation/Create%20Deposit
+[83]: https://developers.wealthsimple.com/#tag/Positions
 
-[84]: https://developers.wealthsimple.com/#operation/List%20Deposits
+[84]: https://developers.wealthsimple.com/#operation/List%20Transactions
+
+[85]: https://developers.wealthsimple.com/#operation/Get%20Projection
+
+[86]: https://developers.wealthsimple.com/#operation/List%20Bank%20Accounts
+
+[87]: https://developers.wealthsimple.com/#operation/Create%20Deposit
+
+[88]: https://developers.wealthsimple.com/#operation/List%20Deposits
+
+[89]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[90]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
