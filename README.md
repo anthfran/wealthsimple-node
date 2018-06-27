@@ -73,6 +73,7 @@ wealthsimple.listAccounts(tokens, params);
 ```javascript
 wealthsimple.tokenRefresh(tokens)
 .then(response => {
+  // store the response, or just the minimum data as below
   return {
     access_token: response.access_token,
     refresh_token: response.refresh_token,
@@ -86,7 +87,6 @@ wealthsimple.tokenRefresh(tokens)
 ```
 
 #### Utilize "Refresh Token if Expired"
-Note, this will check your tokens object
 ```javascript
 wealthsimple.refreshTokenIfExpired(tokens)
 .then(refreshed => {
