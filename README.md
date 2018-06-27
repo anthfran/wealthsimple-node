@@ -2,7 +2,14 @@
 
 Node.js client for Wealthsimple API: https://developers.wealthsimple.com
 
-This is still under development and is a quick implementation for "Hack the 6". There is not functions for every API and they have not all been fully tested.
+This uses a functional programming style which provides a function for each individual API implemented.
+
+This is still under development and is a quick implementation for "Hack the 6". There is not functions for every API and they have not all been fully tested. I do not work for Wealthsimple and I do not know if I will ever finish this module.
+
+TODO List:
+* Complete functions for all Wealthsimple API's in v1
+* Break up into multiple files (auth, users, accounts, people, etc) so that you can import less functions if not all are required
+* Unit tests for all the functions
 
 ## Installation
 
@@ -15,7 +22,7 @@ npm install --save https://github.com/anthfran/wealthsimple-node
 See /examples folder for more
 
 #### Load wealthsimple-node into your project
-```
+```javascript
 const credentials = {
   "client_id": "XXXXXXXXX",
   "client_secret": "XXXXXXXXX",
