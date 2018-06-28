@@ -2,7 +2,6 @@ const rp = require('request-promise-native');
 const HOSTS = require('./hosts');
 
 const request = (host, api, token, params, body) => {
-  console.log(host);
   const options = {
     uri: host + api.url,
     method: api.method,
