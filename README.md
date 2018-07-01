@@ -1,5 +1,7 @@
 # Wealthsimple-node
 
+Note: Development on this has been halted, as I do not have valid API credentials after HackThe6 has been completed.
+
 Node.js client for Wealthsimple API: https://developers.wealthsimple.com
 
 This uses a functional programming style which provides a function for each individual API implemented.
@@ -60,7 +62,10 @@ wealthsimple.tokenExchange(authCode)
 
 #### Call an API example (List Accounts)
 ```javascript
-let params = {};
+// NB: Params are optional and a full list can be found on the Wealthsimple website
+let params = {
+  account_types: "ca_tfsa"
+};
 wealthsimple.listAccounts(tokens, params);
 })
 .catch(error => {
