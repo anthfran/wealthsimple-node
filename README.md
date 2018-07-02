@@ -140,8 +140,7 @@ Exchanges an auth code for OAuth2 tokens
 
 ### Parameters
 
--   `host`  
--   `appCredentials`  
+
 -   `code` **[String][68]** Auth string from Wealthsimple redirect
 
 ### Examples
@@ -158,8 +157,7 @@ Refreshes OAuth2 tokens
 
 ### Parameters
 
--   `host`  
--   `appCredentials`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 
 ### Examples
@@ -176,8 +174,7 @@ If the token is not expired, return the tokens object. Otherwise refreshes the t
 
 ### Parameters
 
--   `host`  
--   `appCredentials`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 
 Returns **[Promise][69]** Promise which will resolve containing OAuth2 Tokens
@@ -189,8 +186,7 @@ Create a User
 
 ### Parameters
 
--   `host`  
--   `appCredentials`  
+
 -   `body` **[Object][70]**
 
 ### Examples
@@ -209,7 +205,7 @@ This API will return a list of Users scoped by the authorization credentials.
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]?** See Wealthsimple website for an example of the request parameters
 
@@ -233,7 +229,7 @@ Get User
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `userId` **[String][68]** Example "user-12398ud"
 
@@ -252,7 +248,7 @@ Create Person
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `body` **[Object][70]** See Wealthsimple website for an example of the request body
 
@@ -272,7 +268,7 @@ This API will return a list of People scoped by the authorization credentials.
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]** See Wealthsimple website for an example of the request parameters
 
@@ -292,7 +288,7 @@ Get a Person entity if you know the person_id and the current credentials have a
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `personId` **[String][68]** Example "person-12398ud"
 
@@ -312,7 +308,7 @@ You can add/remove information to the Person entity as the information becomes a
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `personId` **[String][68]** Example "person-12398ud"
 -   `body` **[Object][70]** See Wealthsimple website for an example of the body
@@ -333,7 +329,7 @@ You can add/remove information to the Person entity as the information becomes a
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `personId` **[String][68]** Example "person-12398ud"
 -   `body` **[Object][70]** See Wealthsimple website for an example of the body
@@ -353,7 +349,7 @@ List Accounts
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
 
@@ -376,7 +372,7 @@ Get Account
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `accountId` **[String][68]** Account ID String
 
@@ -400,7 +396,7 @@ Returns openable account types. If a client_id is provided it will scope the typ
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
 
@@ -424,7 +420,7 @@ Returns historical daily values for a given account. This API will only return a
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
     -   `params.accound_id` **[Object][70]** Required account_id param
@@ -445,7 +441,7 @@ Returns positions for a given account. This API will also allow you to retrieve 
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
     -   `params.accound_id` **[Object][70]** Required account_id param
@@ -466,7 +462,7 @@ Lists all Transactions. The number of Transactions can be potentially prohibitiv
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]?** Optional filter params, See Wealthsimple website for an example of the request parameters
     -   `params.accound_id` **[Object][70]** Required account_id param
@@ -487,7 +483,7 @@ Retrieves a projections of returns for an account based on deposits and frequenc
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]** Projection params
     -   `params.accound_id` **[Object][70]** Required account_id param
@@ -510,7 +506,7 @@ List Bank Accounts
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]?** See website for optional query params
 
@@ -530,7 +526,7 @@ Initiates an electronic funds transfer to deposit funds to an Account from a Ban
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `body` **[Object][70]** Required deposit details
     -   `body.bank_account_id` **[Object][70]** The unique id of the Bank Account
@@ -553,7 +549,7 @@ List Deposits
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `params` **[Object][70]?** See website for optional query params
 
@@ -572,7 +568,7 @@ Get Deposit
 
 ### Parameters
 
--   `host`  
+
 -   `tokens` **[Object][70]** Tokens object from Wealthsimple
 -   `fundsTransferId` **[String][68]** funds_transfer_id
 
