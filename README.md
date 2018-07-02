@@ -1,15 +1,16 @@
 # Wealthsimple-node
 
-Node.js client for Wealthsimple API: https://developers.wealthsimple.com
+Node.js client developed for HackThe6 for the Wealthsimple API - https://developers.wealthsimple.com
 
-Note: Development on this has been halted, as I do not have valid API credentials after HackThe6 has been completed. There are not functions for every API and they have not all been fully tested. I do not work for Wealthsimple and I do not know if I will ever finish this module.
+Note: Development on this has been halted, as I do not have valid API credentials after HackThe6 has been completed. There are not functions for every API and they have not been fully tested. I do not work for Wealthsimple and do not know if this module will ever be completed.
 
 This uses a functional programming style which provides a function for each individual API implemented.
 
 TODO List:
 * Complete functions for all Wealthsimple API's in v1
-* Break up into multiple files (auth, users, accounts, people, etc) so that you can import less functions if not all are required
-* Unit tests for all the functions
+* Break up into multiple files (auth, users, accounts, people, etc) so that you can import less code if not all are functions required
+* Write unit tests
+* Complete examples
 
 ## Installation
 
